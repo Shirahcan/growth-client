@@ -4,6 +4,8 @@ namespace Shirahcan\GrowthClient;
 
 use Illuminate\Support\ServiceProvider;
 use RuntimeException;
+use Shirahcan\GrowthClient\Laravel\GrowthActorResolver;
+use Shirahcan\GrowthClient\Laravel\SessionGrowthActor;
 
 class GrowthClientServiceProvider extends ServiceProvider
 {
@@ -11,7 +13,7 @@ class GrowthClientServiceProvider extends ServiceProvider
     {
         $this->mergeConfigFrom(__DIR__.'/../config/growth-client.php', 'growth-client');
 
-        $this->app->singleton(GrowthClient::class, function () {
+        $this->app->singleton(GrowthServiceClient::class, function () {
             $key = (string) config('growth-client.trust_key', '');
 
             /*
@@ -30,7 +32,17 @@ class GrowthClientServiceProvider extends ServiceProvider
                 baseUrl: (string) config('growth-client.base_url'),
                 trustKey: $key,
                 timeout: (int) config('growth-client.timeout', 10),
+                estateKey: (string) config('growth-client.estate_key', ''),
             );
+        });
+
+        // Product code types against the interface; the proxy needs the concrete forward().
+        $this->app->singleton(GrowthClient::class, fn ($app) => $app->make(GrowthServiceClient::class));
+
+        $this->app->bind(GrowthActorResolver::class, function ($app) {
+            $class = config('growth-client.actor');
+
+            return is_string($class) && $class !== '' ? $app->make($class) : new SessionGrowthActor;
         });
     }
 
@@ -39,5 +51,8 @@ class GrowthClientServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__.'/../config/growth-client.php' => config_path('growth-client.php'),
         ], 'growth-client-config');
+
+        // The kit's inbox for signed callbacks; a no-op where the product already has the table.
+        $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
     }
 }

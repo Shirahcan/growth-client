@@ -27,8 +27,48 @@ class GrowthServiceClient implements GrowthClient
         private string $trustKey,
         private int $timeout = 10,
         private ?Guzzle $http = null,
+        private string $estateKey = '',
     ) {
         $this->http ??= new Guzzle(['base_uri' => rtrim($this->baseUrl, '/').'/', 'timeout' => $this->timeout]);
+    }
+
+    /**
+     * The proxy's door (G2b): one whitelisted call, answered with the service's own status and body so
+     * a 422 lands beside its field. Only transport failures throw. `$estate` sends the estate key
+     * (needed for `?as_product=`); a product that holds none gets {@see Exceptions\EstateKeyNotConfigured}.
+     *
+     * @param  array<string, mixed>  $query
+     * @param  array<string, mixed>  $body
+     * @return array{status: int, body: array<string, mixed>}
+     */
+    public function forward(string $method, string $path, array $query = [], array $body = [], bool $estate = false): array
+    {
+        if ($estate && $this->estateKey === '') {
+            throw new Exceptions\EstateKeyNotConfigured();
+        }
+
+        $options = [
+            'headers' => ['Authorization' => 'Bearer '.($estate ? $this->estateKey : $this->trustKey), 'Accept' => 'application/json'],
+            'http_errors' => false,
+        ];
+        if ($query !== []) {
+            $options['query'] = $query;
+        }
+        if ($method !== 'GET' && $body !== []) {
+            $options['json'] = $body;
+        }
+
+        try {
+            $response = $this->http->request($method, ltrim($path, '/'), $options);
+        } catch (ConnectException $e) {
+            throw new GrowthServiceUnavailable('growth-service is unreachable: '.$e->getMessage(), 'unreachable', 0);
+        } catch (GuzzleException $e) {
+            throw new GrowthServiceUnavailable('growth-service request failed: '.$e->getMessage(), 'transport', 0);
+        }
+
+        $json = json_decode((string) $response->getBody(), true);
+
+        return ['status' => $response->getStatusCode(), 'body' => is_array($json) ? $json : []];
     }
 
     public function whoami(): array

@@ -51,3 +51,26 @@ app()->instance(\Shirahcan\GrowthClient\GrowthClient::class, $fake);
 
 The fake refuses what the service refuses (same class, code and status), proven by
 `FakeKeepsTheServicesContractTest` against the service's real answers.
+
+## Proxy and callbacks (G2b)
+
+```php
+// inside the product's admin auth group, behind its own gate:
+\Shirahcan\GrowthClient\Laravel\GrowthRoutes::mountAdmin('admin/growth-service');
+// public, signed by the service:
+\Shirahcan\GrowthClient\Laravel\GrowthRoutes::webhookRoute('/webhooks/growth-service');
+```
+
+- **A whitelist, never a pass-through** (`GrowthRoutes::TABLE`): a path not listed is 404 and never
+  reaches the service. Rows arrive slice by slice with their endpoint.
+- **The actor is the product's.** On a write row the proxy overwrites the body's `actor` with
+  `GrowthActorResolver` (default: the signed-in user's id and email; bind your own in
+  `growth-client.actor`). A browser-sent `actor` is dropped.
+- **`?as_product=`** needs `GROWTH_SERVICE_ADMIN_KEY` (the shirah.co portal only); without it the proxy
+  answers 403 itself and never calls the service.
+- **Errors (F1 rule 8):** the service's 4xx comes back unchanged; a 5xx is reported and answered 502 with
+  a plain sentence; unreachable is reported and answered 503.
+- **Callbacks:** `X-Growth-Signature` + `X-Growth-Timestamp` (base64 HMAC-SHA256 of `"{ts}.{body}"`,
+  24h replay window, the calendar-service scheme). No `GROWTH_SERVICE_CALLBACK_SECRET` = refuse all.
+  Each `event_id` is recorded once in `growth_service_events` and announced once as
+  `GrowthServiceEventReceived` (listen queued; call `markProcessed()` to drop the payload).
