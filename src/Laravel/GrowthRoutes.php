@@ -60,6 +60,10 @@ final class GrowthRoutes
         ['PUT', 'watched-sources/{id}', 'api/v1/watched-sources/{id}', true],
         ['DELETE', 'watched-sources/{id}', 'api/v1/watched-sources/{id}', true],
         ['POST', 'watched-sources/{id}/check', 'api/v1/watched-sources/{id}/check', true],
+
+        // The radar's settings (G3e5): on/off, tracked countries, thresholds, cadence.
+        ['GET', 'settings/radar', 'api/v1/settings/radar', false],
+        ['PUT', 'settings/radar', 'api/v1/settings/radar', true],
     ];
 
     /** Query parameter naming another product to act for (estate key only, F1 rule 3). */

@@ -68,6 +68,8 @@ class PlanSourcesTest extends TestCase
 
         $this->assertSame(['POST', 'plan/ideas/more', 'api/v1/plan/ideas/more', true], $rows['POST plan/ideas/more']);
         $this->assertSame(['POST', 'watched-sources/{id}/check', 'api/v1/watched-sources/{id}/check', true], $rows['POST watched-sources/{id}/check']);
+        $this->assertSame(['PUT', 'settings/radar', 'api/v1/settings/radar', true], $rows['PUT settings/radar']);
+        $this->assertFalse($rows['GET settings/radar'][3]);
     }
 }
 
