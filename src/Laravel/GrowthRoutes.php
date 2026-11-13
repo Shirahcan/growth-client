@@ -66,6 +66,36 @@ final class GrowthRoutes
         // The radar's settings (G3e5): on/off, tracked countries, thresholds, cadence.
         ['GET', 'settings/radar', 'api/v1/settings/radar', false],
         ['PUT', 'settings/radar', 'api/v1/settings/radar', true],
+
+        // Audience (G4e4a). People: list, the consent trail, the admin's two actions.
+        ['GET', 'audience/subscribers', 'api/v1/audience/subscribers', false],
+        ['GET', 'audience/subscribers/{uuid}', 'api/v1/audience/subscribers/{uuid}', false],
+        ['PUT', 'audience/subscribers/{uuid}/audience', 'api/v1/audience/subscribers/{uuid}/audience', true],
+        ['POST', 'audience/subscribers/{uuid}/suppress', 'api/v1/audience/subscribers/{uuid}/suppress', true],
+        // Lists and saved audiences (G4c1, G4d2); "who would this reach" is a read.
+        ['GET', 'audience/lists', 'api/v1/audience/lists', false],
+        ['POST', 'audience/lists', 'api/v1/audience/lists', true],
+        ['PUT', 'audience/lists/{uuid}', 'api/v1/audience/lists/{uuid}', true],
+        ['DELETE', 'audience/lists/{uuid}', 'api/v1/audience/lists/{uuid}', true],
+        ['GET', 'audience/segments', 'api/v1/audience/segments', false],
+        ['POST', 'audience/segments', 'api/v1/audience/segments', true],
+        ['PUT', 'audience/segments/{uuid}', 'api/v1/audience/segments/{uuid}', true],
+        ['DELETE', 'audience/segments/{uuid}', 'api/v1/audience/segments/{uuid}', true],
+        ['POST', 'audience/estimate', 'api/v1/audience/estimate', false],
+        ['GET', 'audience/platform-groups', 'api/v1/audience/platform-groups', false],
+        ['GET', 'audience/people', 'api/v1/audience/people', false],
+        ['GET', 'audience/lapsing', 'api/v1/audience/lapsing', false],
+        // Imports (G4c2): the browser parses the file and sends rows; preview stores nothing.
+        ['GET', 'audience/imports', 'api/v1/audience/imports', false],
+        ['POST', 'audience/imports/preview', 'api/v1/audience/imports/preview', false],
+        ['POST', 'audience/imports', 'api/v1/audience/imports', true],
+        ['GET', 'audience/imports/{uuid}', 'api/v1/audience/imports/{uuid}', false],
+        ['POST', 'audience/imports/{uuid}/rows', 'api/v1/audience/imports/{uuid}/rows', true],
+        ['POST', 'audience/imports/{uuid}/start', 'api/v1/audience/imports/{uuid}/start', true],
+        ['POST', 'audience/imports/{uuid}/stop', 'api/v1/audience/imports/{uuid}/stop', true],
+        // Audience settings (G4c2/G4c3): double opt-in, topics, regular gap, purge period, lapse warning.
+        ['GET', 'settings/audience', 'api/v1/settings/audience', false],
+        ['PUT', 'settings/audience', 'api/v1/settings/audience', true],
     ];
 
     /** Query parameter naming another product to act for (estate key only, F1 rule 3). */
