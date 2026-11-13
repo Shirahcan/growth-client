@@ -1,0 +1,34 @@
+{
+    "name": "shirahcan/growth-client",
+    "description": "Client and product-side kit for the Shirah estate's growth-service: one way for every product to reach its posts, pages, subscribers, campaigns and results. Owns no Growth data of its own.",
+    "type": "library",
+    "license": "proprietary",
+    "require": {
+        "php": "^8.2",
+        "illuminate/support": "^11.0|^12.0",
+        "guzzlehttp/guzzle": "^7.8"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^11.0",
+        "orchestra/testbench": "^9.0|^10.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Shirahcan\\GrowthClient\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Shirahcan\\GrowthClient\\Tests\\": "tests/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Shirahcan\\GrowthClient\\GrowthClientServiceProvider"
+            ]
+        }
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}
