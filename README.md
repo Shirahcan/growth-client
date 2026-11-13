@@ -102,3 +102,14 @@ What only the product knows that Growth plans from: implement `Plan\PlanSourcesA
 [{key, kind: led_to_bookings|people_asking, label, detail, count, audience, refs}], published_titles,
 gap_audiences: {assistant audience: Growth audience}}`. The service adds its Radar signals and ai-service's
 unanswered questions itself.
+
+## The public door (G4b)
+
+`GrowthRoutes::mountPublic('growth')` mounts a visitor's own confirm, preferences and unsubscribe (the
+token from their email), forwarded with the product's key. Wrap it in a per-visitor throttle. The
+visitor's IP and browser are taken from the request (anything the form sent under those names is
+dropped), and `?as_product=` never passes.
+
+Sign-up is NOT a public row: its answer carries the confirm token. The product's server calls
+`forward('POST', 'api/v1/audience/subscribe', [], [...])`, emails the confirmation itself (until
+growth-service sends mail, G5b), and answers its visitor without the token.

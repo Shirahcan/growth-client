@@ -5,6 +5,7 @@ namespace Shirahcan\GrowthClient\Laravel;
 use Illuminate\Routing\Route as RouteObject;
 use Illuminate\Support\Facades\Route;
 use Shirahcan\GrowthClient\Laravel\Http\GrowthProxyController;
+use Shirahcan\GrowthClient\Laravel\Http\GrowthPublicProxyController;
 use Shirahcan\GrowthClient\Laravel\Http\FactsController;
 use Shirahcan\GrowthClient\Laravel\Http\PlanSourcesController;
 use Shirahcan\GrowthClient\Laravel\Http\WebhookController;
@@ -71,6 +72,33 @@ final class GrowthRoutes
 
     /** What a route segment may hold: never a slash-walk or a query. */
     public const SEGMENT = '[A-Za-z0-9_.:-]{1,96}';
+
+    /**
+     * The PUBLIC rows (G4b): [method, path, upstream, evidence (add the visitor's IP and browser)].
+     * Reached with the token from the person's own email. Sign-up is deliberately absent: see
+     * {@see Http\GrowthPublicProxyController}.
+     *
+     * @var list<array{0: string, 1: string, 2: string, 3: bool}>
+     */
+    public const PUBLIC_TABLE = [
+        ['POST', 'audience/confirm', 'api/v1/audience/confirm', true],
+        ['GET', 'audience/preferences/{token}', 'api/v1/audience/preferences/{token}', false],
+        ['PUT', 'audience/preferences/{token}', 'api/v1/audience/preferences/{token}', false],
+        ['POST', 'audience/preferences/{token}/unsubscribe', 'api/v1/audience/preferences/{token}/unsubscribe', true],
+    ];
+
+    /** Mount the public rows under the product's own public prefix; wrap it in a per-visitor throttle. */
+    public static function mountPublic(string $prefix = 'growth'): void
+    {
+        Route::prefix(trim($prefix, '/'))->group(function () {
+            foreach (self::PUBLIC_TABLE as $i => [$method, $path]) {
+                Route::match([$method], $path, GrowthPublicProxyController::class)
+                    ->where(['token' => '[A-Za-z0-9]{48}'])
+                    ->defaults('_growth_public_row', $i)
+                    ->name('growth-public.'.$i);
+            }
+        });
+    }
 
     public static function mountAdmin(string $prefix = 'growth-service'): void
     {
