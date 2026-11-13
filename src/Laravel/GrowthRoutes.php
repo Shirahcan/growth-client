@@ -8,6 +8,7 @@ use Shirahcan\GrowthClient\Laravel\Http\GrowthProxyController;
 use Shirahcan\GrowthClient\Laravel\Http\GrowthPublicProxyController;
 use Shirahcan\GrowthClient\Laravel\Http\FactsController;
 use Shirahcan\GrowthClient\Laravel\Http\PlanSourcesController;
+use Shirahcan\GrowthClient\Laravel\Http\SegmentsController;
 use Shirahcan\GrowthClient\Laravel\Http\WebhookController;
 
 /**
@@ -123,6 +124,10 @@ final class GrowthRoutes
     {
         Route::post(rtrim($uri, '/').'/facts', FactsController::class)->name('webhooks.growth-service.facts');
         Route::post(rtrim($uri, '/').'/plan-sources', PlanSourcesController::class)->name('webhooks.growth-service.plan-sources');
+        // G4d1: the product's people groups (catalogue, expand to email hashes, search), signed like facts.
+        Route::post(rtrim($uri, '/').'/segments', [SegmentsController::class, 'catalog'])->name('webhooks.growth-service.segments');
+        Route::post(rtrim($uri, '/').'/segments/expand', [SegmentsController::class, 'expand'])->name('webhooks.growth-service.segments.expand');
+        Route::post(rtrim($uri, '/').'/segments/search', [SegmentsController::class, 'search'])->name('webhooks.growth-service.segments.search');
 
         return Route::post($uri, WebhookController::class)->name('webhooks.growth-service');
     }

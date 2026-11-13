@@ -48,4 +48,14 @@ return [
     */
     'plan_sources' => null,
 
+    /*
+    |--------------------------------------------------------------------------
+    | People groups (G4d1)
+    |--------------------------------------------------------------------------
+    | This product's own people as groups an admin can pick: a class implementing
+    | Segments\PlatformSegmentsAdapter. Null = the signed segments routes answer "not available".
+    */
+
+    'segments' => null,
+
 ];
