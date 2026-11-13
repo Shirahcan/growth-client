@@ -33,6 +33,7 @@ class FakeGrowth implements GrowthClient
         private array $products = ['portify', 'mploynow'],
     ) {
         $this->log = new \ArrayObject;
+        $this->data = new \ArrayObject;
     }
 
     public static function forProduct(string $product = 'portify'): self
@@ -69,6 +70,57 @@ class FakeGrowth implements GrowthClient
         $clone->product = $product;
 
         return $clone;
+    }
+
+    /** @var \ArrayObject<string, array<string, mixed>> per product: ideas, signals, sources */
+    private \ArrayObject $data;
+
+    /**
+     * Seed a product's Plan data the way the service would answer it.
+     *
+     * @param  list<array<string, mixed>>  $ideas
+     * @param  list<array<string, mixed>>  $signals
+     * @param  list<array<string, mixed>>  $sources
+     */
+    public function seedPlan(string $product, array $ideas = [], array $signals = [], array $sources = []): static
+    {
+        $this->data[$product] = ['ideas' => $ideas, 'signals' => $signals, 'sources' => $sources];
+
+        return $this;
+    }
+
+    public function planIdeas(?string $month = null): array
+    {
+        $this->record(__FUNCTION__, [$month]);
+        $ideas = $this->dataFor('ideas');
+        $month = $month !== null && preg_match('/^\d{4}-\d{2}$/', $month) === 1 ? $month : date('Y-m');
+
+        return [
+            'month' => $month,
+            'plan_due' => date('Y-m-d'),
+            'accepted' => count(array_filter($ideas, fn ($i) => in_array($i['status'] ?? 'idea', ['accepted', 'drafted', 'published'], true))),
+            'ideas' => $ideas,
+        ];
+    }
+
+    public function planRadar(): array
+    {
+        $this->record(__FUNCTION__);
+
+        return ['signals' => $this->dataFor('signals')];
+    }
+
+    public function watchedSources(): array
+    {
+        $this->record(__FUNCTION__);
+
+        return ['sources' => $this->dataFor('sources')];
+    }
+
+    /** @return list<array<string, mixed>> only this fake's product's rows, as the service scopes them */
+    private function dataFor(string $kind): array
+    {
+        return array_values(($this->data[$this->product] ?? [])[$kind] ?? []);
     }
 
     /** @return list<array{method: string, product: string, acting: ?string, args: array<int, mixed>}> */

@@ -31,4 +31,20 @@ interface GrowthClient
      * the original keeps acting for its own product.
      */
     public function asProduct(string $product): static;
+
+    /**
+     * The month's plan ideas (G3a), as growth-service's Plan answers it: `{month, plan_due, accepted,
+     * ideas: [{uuid, title, audience, formats, why, status, skip_reason, planned_for, post_uuid}]}`.
+     * Reads only: every plan write goes through the proxy, which records the actor.
+     *
+     * @param  string|null  $month  "YYYY-MM"; null = this month
+     * @return array<string, mixed>
+     */
+    public function planIdeas(?string $month = null): array;
+
+    /** @return array{signals: list<array<string, mixed>>} the open radar signals */
+    public function planRadar(): array;
+
+    /** @return array{sources: list<array<string, mixed>>} the product's watched sources */
+    public function watchedSources(): array;
 }

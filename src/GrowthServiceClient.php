@@ -81,6 +81,26 @@ class GrowthServiceClient implements GrowthClient
         ];
     }
 
+    public function planIdeas(?string $month = null): array
+    {
+        // No client-side check: the service is the authority, and it reads a malformed month as this month.
+        return $this->send('GET', 'api/v1/plan/ideas', $month !== null ? ['month' => $month] : []);
+    }
+
+    public function planRadar(): array
+    {
+        $data = $this->send('GET', 'api/v1/plan/radar');
+
+        return ['signals' => array_values((array) ($data['signals'] ?? []))];
+    }
+
+    public function watchedSources(): array
+    {
+        $data = $this->send('GET', 'api/v1/watched-sources');
+
+        return ['sources' => array_values((array) ($data['sources'] ?? []))];
+    }
+
     public function asProduct(string $product): static
     {
         $clone = clone $this;

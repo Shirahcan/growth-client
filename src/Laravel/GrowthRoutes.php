@@ -36,6 +36,25 @@ final class GrowthRoutes
     public const TABLE = [
         // Proves the chain end to end: which product the service resolved from this product's key.
         ['GET', 'whoami', 'api/v1/whoami', false],
+
+        // Plan and Radar (G3a). Every write records who decided (actor).
+        ['GET', 'plan/ideas', 'api/v1/plan/ideas', false],
+        ['GET', 'plan/ideas/{uuid}', 'api/v1/plan/ideas/{uuid}', false],
+        ['POST', 'plan/ideas/{uuid}/accept', 'api/v1/plan/ideas/{uuid}/accept', true],
+        ['POST', 'plan/ideas/{uuid}/skip', 'api/v1/plan/ideas/{uuid}/skip', true],
+        ['POST', 'plan/ideas/{uuid}/undo', 'api/v1/plan/ideas/{uuid}/undo', true],
+        ['POST', 'plan/ideas/{uuid}/schedule', 'api/v1/plan/ideas/{uuid}/schedule', true],
+        ['GET', 'plan/calendar', 'api/v1/plan/calendar', false],
+        ['GET', 'plan/radar', 'api/v1/plan/radar', false],
+        ['GET', 'plan/radar/{id}', 'api/v1/plan/radar/{id}', false],
+        ['POST', 'plan/radar/{id}/dismiss', 'api/v1/plan/radar/{id}/dismiss', true],
+
+        // Watched official sources (G3a). "Check now" and the radar settings arrive with G3b / G3c.
+        ['GET', 'watched-sources', 'api/v1/watched-sources', false],
+        ['GET', 'watched-sources/{id}', 'api/v1/watched-sources/{id}', false],
+        ['POST', 'watched-sources', 'api/v1/watched-sources', true],
+        ['PUT', 'watched-sources/{id}', 'api/v1/watched-sources/{id}', true],
+        ['DELETE', 'watched-sources/{id}', 'api/v1/watched-sources/{id}', true],
     ];
 
     /** Query parameter naming another product to act for (estate key only, F1 rule 3). */

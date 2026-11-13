@@ -97,6 +97,21 @@ class ProxyTest extends TestCase
         $this->assertSame('x', $sent['title']);
     }
 
+    public function test_a_real_plan_write_row_carries_the_sessions_actor_to_the_service(): void
+    {
+        $this->signIn();
+        $this->service([self::answer(200, ['success' => true, 'data' => ['idea' => ['uuid' => 'u1', 'status' => 'accepted']]])]);
+
+        $this->postJson('/admin/growth-service/plan/ideas/u1/accept', ['planned_for' => '2026-11-20', 'actor' => ['ref' => 'user:1']])
+            ->assertOk()->assertJsonPath('data.idea.status', 'accepted');
+
+        $request = $this->history[0]['request'];
+        $this->assertSame('/api/v1/plan/ideas/u1/accept', $request->getUri()->getPath());
+        $sent = json_decode((string) $request->getBody(), true);
+        $this->assertSame(['ref' => 'user:42', 'name' => 'ada@example.com'], $sent['actor']);
+        $this->assertSame('2026-11-20', $sent['planned_for']);
+    }
+
     public function test_a_read_row_never_carries_an_actor_or_a_body(): void
     {
         $this->service([self::answer(200, ['product' => 'portify', 'acting_product' => null])]);
