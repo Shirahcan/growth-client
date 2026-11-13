@@ -42,4 +42,10 @@ return [
     */
     'facts' => null,
 
+    /*
+    | What only this product knows that Growth plans from (G3d3): a class implementing
+    | Plan\PlanSourcesAdapter. Null = the signed plan-sources route answers "not available".
+    */
+    'plan_sources' => null,
+
 ];

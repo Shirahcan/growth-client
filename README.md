@@ -93,3 +93,12 @@ return ['facts' => \App\Services\Growth\Adapters\MyFacts::class];
   source_label, source_url`.
 - **Not available is an answer:** throw `FactsUnavailable` with a plain sentence (answered 503
   `not_available`). Never return an old value or an empty list to look healthy.
+
+## Plan sources (G3d3)
+
+What only the product knows that Growth plans from: implement `Plan\PlanSourcesAdapter` and name it in
+`growth-client.plan_sources`. `webhookRoute($uri)` mounts `POST $uri/plan-sources` (same signature and
+5-minute window as `/facts`), body `{month: "YYYY-MM"}`, answering `{product: {name, about}, sources:
+[{key, kind: led_to_bookings|people_asking, label, detail, count, audience, refs}], published_titles,
+gap_audiences: {assistant audience: Growth audience}}`. The service adds its Radar signals and ai-service's
+unanswered questions itself.

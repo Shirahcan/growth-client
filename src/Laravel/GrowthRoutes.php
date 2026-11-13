@@ -6,6 +6,7 @@ use Illuminate\Routing\Route as RouteObject;
 use Illuminate\Support\Facades\Route;
 use Shirahcan\GrowthClient\Laravel\Http\GrowthProxyController;
 use Shirahcan\GrowthClient\Laravel\Http\FactsController;
+use Shirahcan\GrowthClient\Laravel\Http\PlanSourcesController;
 use Shirahcan\GrowthClient\Laravel\Http\WebhookController;
 
 /**
@@ -40,6 +41,8 @@ final class GrowthRoutes
 
         // Plan and Radar (G3a). Every write records who decided (actor).
         ['GET', 'plan/ideas', 'api/v1/plan/ideas', false],
+        // "Suggest more" (G3d3): an explicit ask, so ideas are written even if some were made today.
+        ['POST', 'plan/ideas/more', 'api/v1/plan/ideas/more', true],
         ['GET', 'plan/ideas/{uuid}', 'api/v1/plan/ideas/{uuid}', false],
         ['POST', 'plan/ideas/{uuid}/accept', 'api/v1/plan/ideas/{uuid}/accept', true],
         ['POST', 'plan/ideas/{uuid}/skip', 'api/v1/plan/ideas/{uuid}/skip', true],
@@ -50,12 +53,13 @@ final class GrowthRoutes
         ['GET', 'plan/radar/{id}', 'api/v1/plan/radar/{id}', false],
         ['POST', 'plan/radar/{id}/dismiss', 'api/v1/plan/radar/{id}/dismiss', true],
 
-        // Watched official sources (G3a). "Check now" and the radar settings arrive with G3b / G3c.
+        // Watched official sources (G3a); "Check now" (G3b, built-in feeds through the product's facts since G3g).
         ['GET', 'watched-sources', 'api/v1/watched-sources', false],
         ['GET', 'watched-sources/{id}', 'api/v1/watched-sources/{id}', false],
         ['POST', 'watched-sources', 'api/v1/watched-sources', true],
         ['PUT', 'watched-sources/{id}', 'api/v1/watched-sources/{id}', true],
         ['DELETE', 'watched-sources/{id}', 'api/v1/watched-sources/{id}', true],
+        ['POST', 'watched-sources/{id}/check', 'api/v1/watched-sources/{id}/check', true],
     ];
 
     /** Query parameter naming another product to act for (estate key only, F1 rule 3). */
@@ -86,6 +90,7 @@ final class GrowthRoutes
     public static function webhookRoute(string $uri = '/webhooks/growth-service'): RouteObject
     {
         Route::post(rtrim($uri, '/').'/facts', FactsController::class)->name('webhooks.growth-service.facts');
+        Route::post(rtrim($uri, '/').'/plan-sources', PlanSourcesController::class)->name('webhooks.growth-service.plan-sources');
 
         return Route::post($uri, WebhookController::class)->name('webhooks.growth-service');
     }
