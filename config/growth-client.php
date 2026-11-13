@@ -36,4 +36,10 @@ return [
     */
     'actor' => null,
 
+    /*
+    | This product's official figures, for Radar and post facts (G3c): a class implementing
+    | Facts\FactsAdapter. Null = the signed facts route answers "not available".
+    */
+    'facts' => null,
+
 ];

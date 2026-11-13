@@ -5,6 +5,7 @@ namespace Shirahcan\GrowthClient\Laravel;
 use Illuminate\Routing\Route as RouteObject;
 use Illuminate\Support\Facades\Route;
 use Shirahcan\GrowthClient\Laravel\Http\GrowthProxyController;
+use Shirahcan\GrowthClient\Laravel\Http\FactsController;
 use Shirahcan\GrowthClient\Laravel\Http\WebhookController;
 
 /**
@@ -78,8 +79,14 @@ final class GrowthRoutes
         });
     }
 
+    /**
+     * The service's two signed ways in: `$uri` receives events, `$uri/facts` answers "what is the
+     * figure now?" from the product's FactsAdapter (G3c). Returns the event route.
+     */
     public static function webhookRoute(string $uri = '/webhooks/growth-service'): RouteObject
     {
+        Route::post(rtrim($uri, '/').'/facts', FactsController::class)->name('webhooks.growth-service.facts');
+
         return Route::post($uri, WebhookController::class)->name('webhooks.growth-service');
     }
 }

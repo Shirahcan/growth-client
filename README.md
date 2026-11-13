@@ -74,3 +74,22 @@ The fake refuses what the service refuses (same class, code and status), proven 
   24h replay window, the calendar-service scheme). No `GROWTH_SERVICE_CALLBACK_SECRET` = refuse all.
   Each `event_id` is recorded once in `growth_service_events` and announced once as
   `GrowthServiceEventReceived` (listen queued; call `markProcessed()` to drop the payload).
+
+## Facts (G3c)
+
+The service asks the product for its current official figures (Radar, post facts). Implement
+`Facts\FactsAdapter` and name it in `growth-client.facts` (or bind `FactsAdapter` yourself):
+
+```php
+// config/growth-client.php (only the keys you set; the kit fills the rest)
+return ['facts' => \App\Services\Growth\Adapters\MyFacts::class];
+```
+
+- `webhookRoute($uri)` also mounts `POST $uri/facts`: same signature and secret as the callbacks, but a
+  **5-minute** window (a read is never redelivered). Body `{op: feeds}`, `{op: figures, feed, scope?}`
+  or `{op: figure, key}`; answers `{data}`.
+- Two kinds of feed: `events` (each figure is a happening; a new key is news) and `levels` (a figure
+  moves; a moved `number` is news). A figure carries `key, label, value, number, group, as_of,
+  source_label, source_url`.
+- **Not available is an answer:** throw `FactsUnavailable` with a plain sentence (answered 503
+  `not_available`). Never return an old value or an empty list to look healthy.

@@ -17,13 +17,14 @@ final class WebhookSignature
     /** A callback older than this is refused (replay). Matches the service's longest backoff. */
     public const TOLERANCE_SECONDS = 86400;
 
-    public static function verify(string $rawBody, ?string $signature, ?string $timestamp, string $base64Secret, ?int $now = null): bool
+    /** `$tolerance`: the receiver's 24 hours by default; a synchronous read (the facts call) passes 5 minutes. */
+    public static function verify(string $rawBody, ?string $signature, ?string $timestamp, string $base64Secret, ?int $now = null, int $tolerance = self::TOLERANCE_SECONDS): bool
     {
         if ($signature === null || $signature === '' || $timestamp === null || ! ctype_digit($timestamp) || $base64Secret === '') {
             return false;
         }
 
-        if (abs(($now ?? time()) - (int) $timestamp) > self::TOLERANCE_SECONDS) {
+        if (abs(($now ?? time()) - (int) $timestamp) > $tolerance) {
             return false;
         }
 
