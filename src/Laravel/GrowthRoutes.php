@@ -68,6 +68,10 @@ final class GrowthRoutes
         ['GET', 'settings/radar', 'api/v1/settings/radar', false],
         ['PUT', 'settings/radar', 'api/v1/settings/radar', true],
 
+        // The brand kit (G2e): name, logo, colours, fonts, legal links; the sender is shown read-only.
+        ['GET', 'settings/brand', 'api/v1/settings/brand', false],
+        ['PUT', 'settings/brand', 'api/v1/settings/brand', true],
+
         // Audience (G4e4a). People: list, the consent trail, the admin's two actions.
         ['GET', 'audience/subscribers', 'api/v1/audience/subscribers', false],
         ['GET', 'audience/subscribers/{uuid}', 'api/v1/audience/subscribers/{uuid}', false],

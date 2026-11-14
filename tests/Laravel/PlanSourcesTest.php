@@ -70,6 +70,9 @@ class PlanSourcesTest extends TestCase
         $this->assertSame(['POST', 'watched-sources/{id}/check', 'api/v1/watched-sources/{id}/check', true], $rows['POST watched-sources/{id}/check']);
         $this->assertSame(['PUT', 'settings/radar', 'api/v1/settings/radar', true], $rows['PUT settings/radar']);
         $this->assertFalse($rows['GET settings/radar'][3]);
+        // The brand kit (G2e): read without an actor, saved with one.
+        $this->assertSame(['PUT', 'settings/brand', 'api/v1/settings/brand', true], $rows['PUT settings/brand']);
+        $this->assertFalse($rows['GET settings/brand'][3]);
     }
 }
 
