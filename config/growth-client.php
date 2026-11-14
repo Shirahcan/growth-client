@@ -58,4 +58,11 @@ return [
 
     'segments' => null,
 
+    /*
+    | G5c3a: how many of this product's own users an announcement reaches: a class implementing
+    | Segments\AnnouncementReachAdapter. Null = the signed reach route answers "not available".
+    */
+
+    'announcement_reach' => null,
+
 ];

@@ -20,6 +20,20 @@ class AudienceRowsTest extends TestCase
         }
     }
 
+    public function test_announcement_rows_map_to_their_own_paths_and_every_write_records_who_decided(): void
+    {
+        $rows = collect(GrowthRoutes::TABLE)->filter(fn (array $r) => str_starts_with($r[1], 'announcements'));
+
+        $this->assertCount(7, $rows);
+        foreach ($rows as [$method, $path, $upstream, $actor]) {
+            $this->assertSame('api/v1/'.$path, $upstream);
+            $isRead = $method === 'GET' || $path === 'announcements/estimate';
+            $this->assertSame(! $isRead, $actor, "{$method} {$path}");
+        }
+        // The delivery report is the product's own server call, never a browser row.
+        $this->assertFalse(collect(GrowthRoutes::TABLE)->contains(fn (array $r) => str_contains($r[2], '/delivery')));
+    }
+
     public function test_the_public_sign_up_is_still_not_a_row(): void
     {
         $this->assertFalse(collect(GrowthRoutes::TABLE)->contains(fn (array $r) => $r[1] === 'audience/subscribe'));

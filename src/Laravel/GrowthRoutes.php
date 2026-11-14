@@ -6,6 +6,7 @@ use Illuminate\Routing\Route as RouteObject;
 use Illuminate\Support\Facades\Route;
 use Shirahcan\GrowthClient\Laravel\Http\GrowthProxyController;
 use Shirahcan\GrowthClient\Laravel\Http\GrowthPublicProxyController;
+use Shirahcan\GrowthClient\Laravel\Http\AnnouncementReachController;
 use Shirahcan\GrowthClient\Laravel\Http\FactsController;
 use Shirahcan\GrowthClient\Laravel\Http\PlanSourcesController;
 use Shirahcan\GrowthClient\Laravel\Http\SegmentsController;
@@ -96,6 +97,15 @@ final class GrowthRoutes
         // Audience settings (G4c2/G4c3): double opt-in, topics, regular gap, purge period, lapse warning.
         ['GET', 'settings/audience', 'api/v1/settings/audience', false],
         ['PUT', 'settings/audience', 'api/v1/settings/audience', true],
+        // G5c3a: announcements are written, targeted, scheduled, published and ended on the service; the product
+        // delivers them in its own app. `estimate` asks the product for the reach (its users, not subscribers).
+        ['GET', 'announcements', 'api/v1/announcements', false],
+        ['POST', 'announcements', 'api/v1/announcements', true],
+        ['POST', 'announcements/estimate', 'api/v1/announcements/estimate', false],
+        ['PUT', 'announcements/{uuid}', 'api/v1/announcements/{uuid}', true],
+        ['POST', 'announcements/{uuid}/publish', 'api/v1/announcements/{uuid}/publish', true],
+        ['POST', 'announcements/{uuid}/schedule', 'api/v1/announcements/{uuid}/schedule', true],
+        ['POST', 'announcements/{uuid}/end', 'api/v1/announcements/{uuid}/end', true],
     ];
 
     /** Query parameter naming another product to act for (estate key only, F1 rule 3). */
@@ -158,6 +168,8 @@ final class GrowthRoutes
         Route::post(rtrim($uri, '/').'/segments', [SegmentsController::class, 'catalog'])->name('webhooks.growth-service.segments');
         Route::post(rtrim($uri, '/').'/segments/expand', [SegmentsController::class, 'expand'])->name('webhooks.growth-service.segments.expand');
         Route::post(rtrim($uri, '/').'/segments/search', [SegmentsController::class, 'search'])->name('webhooks.growth-service.segments.search');
+        // G5c3a: how many of the product's own users an announcement would reach (only the product can count them).
+        Route::post(rtrim($uri, '/').'/announcements/reach', AnnouncementReachController::class)->name('webhooks.growth-service.announcements.reach');
 
         return Route::post($uri, WebhookController::class)->name('webhooks.growth-service');
     }
