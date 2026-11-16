@@ -73,6 +73,22 @@ final class GrowthRoutes
         ['GET', 'settings/brand', 'api/v1/settings/brand', false],
         ['PUT', 'settings/brand', 'api/v1/settings/brand', true],
 
+        // The CTA library (post-and-newsletter-layouts B1): copy per stage, variant and category; `resolve` is what a
+        // post's CTA part reads ("not configured" when nothing is set up).
+        ['GET', 'ctas', 'api/v1/ctas', false],
+        ['GET', 'ctas/resolve', 'api/v1/ctas/resolve', false],
+        ['POST', 'ctas', 'api/v1/ctas', true],
+        ['PUT', 'ctas/{id}', 'api/v1/ctas/{id}', true],
+        ['DELETE', 'ctas/{id}', 'api/v1/ctas/{id}', true],
+
+        // The story bank (B5): consented, anonymised, verified client stories; `?pickable=1` lists what a part may show.
+        ['GET', 'stories', 'api/v1/stories', false],
+        ['GET', 'stories/{id}', 'api/v1/stories/{id}', false],
+        ['POST', 'stories', 'api/v1/stories', true],
+        ['PUT', 'stories/{id}', 'api/v1/stories/{id}', true],
+        ['POST', 'stories/{id}/verify', 'api/v1/stories/{id}/verify', true],
+        ['DELETE', 'stories/{id}', 'api/v1/stories/{id}', true],
+
         // Audience (G4e4a). People: list, the consent trail, the admin's two actions.
         ['GET', 'audience/subscribers', 'api/v1/audience/subscribers', false],
         ['GET', 'audience/subscribers/{uuid}', 'api/v1/audience/subscribers/{uuid}', false],

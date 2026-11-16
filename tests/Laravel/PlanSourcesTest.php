@@ -73,6 +73,12 @@ class PlanSourcesTest extends TestCase
         // The brand kit (G2e): read without an actor, saved with one.
         $this->assertSame(['PUT', 'settings/brand', 'api/v1/settings/brand', true], $rows['PUT settings/brand']);
         $this->assertFalse($rows['GET settings/brand'][3]);
+
+        // B1 + B5: the CTA library and the story bank. Reads carry no actor; every change does.
+        $this->assertSame(['GET', 'ctas/resolve', 'api/v1/ctas/resolve', false], $rows['GET ctas/resolve']);
+        $this->assertTrue($rows['PUT ctas/{id}'][3]);
+        $this->assertTrue($rows['POST stories/{id}/verify'][3]);
+        $this->assertFalse($rows['GET stories/{id}'][3]);
     }
 }
 
