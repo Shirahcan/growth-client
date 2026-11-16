@@ -6,6 +6,7 @@ use Illuminate\Routing\Route as RouteObject;
 use Illuminate\Support\Facades\Route;
 use Shirahcan\GrowthClient\Laravel\Http\GrowthProxyController;
 use Shirahcan\GrowthClient\Laravel\Http\GrowthPublicProxyController;
+use Shirahcan\GrowthClient\Laravel\Http\GrowthTrackController;
 use Shirahcan\GrowthClient\Laravel\Http\AnnouncementReachController;
 use Shirahcan\GrowthClient\Laravel\Http\FactsController;
 use Shirahcan\GrowthClient\Laravel\Http\PlanSourcesController;
@@ -110,6 +111,18 @@ final class GrowthRoutes
         ['POST', 'announcements/{uuid}/publish', 'api/v1/announcements/{uuid}/publish', true],
         ['POST', 'announcements/{uuid}/schedule', 'api/v1/announcements/{uuid}/schedule', true],
         ['POST', 'announcements/{uuid}/end', 'api/v1/announcements/{uuid}/end', true],
+        // G5d1: newsletters and alerts on the service. The delivery report and the sender stay server-side.
+        ['GET', 'campaigns', 'api/v1/campaigns', false],
+        ['POST', 'campaigns', 'api/v1/campaigns', true],
+        ['POST', 'campaigns/estimate', 'api/v1/campaigns/estimate', false],
+        ['GET', 'campaigns/{uuid}', 'api/v1/campaigns/{uuid}', false],
+        ['PUT', 'campaigns/{uuid}', 'api/v1/campaigns/{uuid}', true],
+        ['DELETE', 'campaigns/{uuid}', 'api/v1/campaigns/{uuid}', true],
+        ['GET', 'campaigns/{uuid}/checks', 'api/v1/campaigns/{uuid}/checks', false],
+        ['POST', 'campaigns/{uuid}/schedule', 'api/v1/campaigns/{uuid}/schedule', true],
+        ['POST', 'campaigns/{uuid}/send', 'api/v1/campaigns/{uuid}/send', true],
+        ['POST', 'campaigns/{uuid}/cancel', 'api/v1/campaigns/{uuid}/cancel', true],
+        ['POST', 'campaigns/{uuid}/test', 'api/v1/campaigns/{uuid}/test', true],
     ];
 
     /** Query parameter naming another product to act for (estate key only, F1 rule 3). */
@@ -142,6 +155,9 @@ final class GrowthRoutes
                     ->defaults('_growth_public_row', $i)
                     ->name('growth-public.'.$i);
             }
+            // G5d2: opens and clicks on mail the service sent; an image and a redirect, so their own controller.
+            Route::get('track/{token}/open', [GrowthTrackController::class, 'open'])->where('token', '[A-Za-z0-9]{32}')->name('growth-public.track.open');
+            Route::get('track/{token}/click', [GrowthTrackController::class, 'click'])->where('token', '[A-Za-z0-9]{32}')->name('growth-public.track.click');
         });
     }
 

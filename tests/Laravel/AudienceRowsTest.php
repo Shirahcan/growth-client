@@ -34,6 +34,18 @@ class AudienceRowsTest extends TestCase
         $this->assertFalse(collect(GrowthRoutes::TABLE)->contains(fn (array $r) => str_contains($r[2], '/delivery')));
     }
 
+    public function test_campaign_rows_map_to_their_own_paths_and_every_write_records_who_decided(): void
+    {
+        $rows = collect(GrowthRoutes::TABLE)->filter(fn (array $r) => str_starts_with($r[1], 'campaigns'));
+
+        $this->assertCount(11, $rows);
+        foreach ($rows as [$method, $path, $upstream, $actor]) {
+            $this->assertSame('api/v1/'.$path, $upstream);
+            $isRead = $method === 'GET' || $path === 'campaigns/estimate';
+            $this->assertSame(! $isRead, $actor, "{$method} {$path}");
+        }
+    }
+
     public function test_the_public_sign_up_is_still_not_a_row(): void
     {
         $this->assertFalse(collect(GrowthRoutes::TABLE)->contains(fn (array $r) => $r[1] === 'audience/subscribe'));
