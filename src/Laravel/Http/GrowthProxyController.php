@@ -37,7 +37,7 @@ final class GrowthProxyController
      * One table row's forwarding rules (the seam tests drive with a synthetic write row until real
      * write rows arrive in G3+).
      *
-     * @param  array{0: string, 1: string, 2: string, 3: bool}  $row
+     * @param  array{0: string, 1: string, 2: string, 3: bool, 4?: int}  $row  4: this row's own timeout in seconds (a slow row)
      * @param  array<string, string>  $params
      */
     public function forRow(Request $request, array $row, GrowthServiceClient $client, GrowthActorResolver $actor, array $params = []): JsonResponse
@@ -64,7 +64,7 @@ final class GrowthProxyController
         }
 
         try {
-            $result = $client->forward($method, $path, $query, $body, $estate);
+            $result = $client->forward($method, $path, $query, $body, $estate, isset($row[4]) ? (int) $row[4] : null);
         } catch (EstateKeyNotConfigured $e) {
             return new JsonResponse(['error' => $e->errorCode, 'message' => $e->userMessage()], 403);
         } catch (GrowthServiceUnavailable $e) {

@@ -37,7 +37,7 @@ final class GrowthRoutes
      * [method, browser path pattern, upstream path, actor (overwrite `actor` in the body)].
      * `{x}` segments are copied to the upstream path by name.
      *
-     * @var list<array{0: string, 1: string, 2: string, 3: bool}>
+     * @var list<array{0: string, 1: string, 2: string, 3: bool, 4?: int}>  4: a slow row's own timeout, seconds
      */
     public const TABLE = [
         // Proves the chain end to end: which product the service resolved from this product's key.
@@ -116,7 +116,9 @@ final class GrowthRoutes
         ['POST', 'campaigns', 'api/v1/campaigns', true],
         ['POST', 'campaigns/estimate', 'api/v1/campaigns/estimate', false],
         // G5d5: a body drafted from the subject, on the admin's click (an AI call billed to the product: who asked is kept).
-        ['POST', 'campaigns/draft', 'api/v1/campaigns/draft', true],
+        // ⚠ Its own 90-second timeout: a model writing an email takes longer than the default 10, and the test box's
+        // first draft came back as a 503 "unreachable" while the service was still writing it (0.13.1).
+        ['POST', 'campaigns/draft', 'api/v1/campaigns/draft', true, 90],
         ['GET', 'campaigns/{uuid}', 'api/v1/campaigns/{uuid}', false],
         ['PUT', 'campaigns/{uuid}', 'api/v1/campaigns/{uuid}', true],
         ['DELETE', 'campaigns/{uuid}', 'api/v1/campaigns/{uuid}', true],

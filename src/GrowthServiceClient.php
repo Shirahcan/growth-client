@@ -41,7 +41,8 @@ class GrowthServiceClient implements GrowthClient
      * @param  array<string, mixed>  $body
      * @return array{status: int, body: array<string, mixed>}
      */
-    public function forward(string $method, string $path, array $query = [], array $body = [], bool $estate = false): array
+    /** @param int|null $timeout seconds for THIS call only (a slow row, e.g. an AI draft); null keeps the client's default */
+    public function forward(string $method, string $path, array $query = [], array $body = [], bool $estate = false, ?int $timeout = null): array
     {
         if ($estate && $this->estateKey === '') {
             throw new Exceptions\EstateKeyNotConfigured();
@@ -51,6 +52,9 @@ class GrowthServiceClient implements GrowthClient
             'headers' => ['Authorization' => 'Bearer '.($estate ? $this->estateKey : $this->trustKey), 'Accept' => 'application/json'],
             'http_errors' => false,
         ];
+        if ($timeout !== null) {
+            $options['timeout'] = $timeout;
+        }
         if ($query !== []) {
             $options['query'] = $query;
         }

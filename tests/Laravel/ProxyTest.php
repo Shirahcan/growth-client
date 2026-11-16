@@ -75,6 +75,22 @@ class ProxyTest extends TestCase
         $this->assertSame('/api/v1/whoami', $this->history[0]['request']->getUri()->getPath());
     }
 
+    public function test_a_slow_row_waits_its_own_timeout_and_every_other_row_keeps_the_clients(): void
+    {
+        $this->signIn();
+        $this->service([
+            self::answer(200, ['success' => true, 'data' => ['draft' => ['body_html' => '<p>x</p>', 'preheader' => '']]]),
+            self::answer(200, ['product' => 'portify', 'acting_product' => null]),
+        ]);
+
+        // A model writing an email takes far longer than the client's default (G5d5: a 503 at 10s on the test box).
+        $this->postJson('/admin/growth-service/campaigns/draft', ['subject' => 'Draws', 'kind' => 'regular'])->assertOk();
+        $this->assertSame(90, $this->history[0]['options']['timeout'] ?? null);
+
+        $this->getJson('/admin/growth-service/whoami')->assertOk();
+        $this->assertArrayNotHasKey('timeout', $this->history[1]['options']);
+    }
+
     public function test_a_path_that_is_not_listed_is_404_and_never_reaches_the_service(): void
     {
         $this->service([]);
