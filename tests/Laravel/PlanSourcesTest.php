@@ -79,6 +79,8 @@ class PlanSourcesTest extends TestCase
         $this->assertTrue($rows['PUT ctas/{id}'][3]);
         $this->assertTrue($rows['POST stories/{id}/verify'][3]);
         $this->assertFalse($rows['GET stories/{id}'][3]);
+        $this->assertSame(['PUT', 'layouts/{key}', 'api/v1/layouts/{key}', true], $rows['PUT layouts/{key}']);
+        $this->assertFalse($rows['GET layouts'][3]);
     }
 }
 

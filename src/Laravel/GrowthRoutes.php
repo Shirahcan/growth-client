@@ -89,6 +89,11 @@ final class GrowthRoutes
         ['POST', 'stories/{id}/verify', 'api/v1/stories/{id}/verify', true],
         ['DELETE', 'stories/{id}', 'api/v1/stories/{id}', true],
 
+        // Layouts (A4): the skeletons posts and emails are built on; an admin edit is validated by pml-kit.
+        ['GET', 'layouts', 'api/v1/layouts', false],
+        ['GET', 'layouts/{key}', 'api/v1/layouts/{key}', false],
+        ['PUT', 'layouts/{key}', 'api/v1/layouts/{key}', true],
+
         // Audience (G4e4a). People: list, the consent trail, the admin's two actions.
         ['GET', 'audience/subscribers', 'api/v1/audience/subscribers', false],
         ['GET', 'audience/subscribers/{uuid}', 'api/v1/audience/subscribers/{uuid}', false],
