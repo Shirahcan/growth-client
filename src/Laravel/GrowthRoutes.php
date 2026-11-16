@@ -115,6 +115,8 @@ final class GrowthRoutes
         ['GET', 'campaigns', 'api/v1/campaigns', false],
         ['POST', 'campaigns', 'api/v1/campaigns', true],
         ['POST', 'campaigns/estimate', 'api/v1/campaigns/estimate', false],
+        // G5d5: a body drafted from the subject, on the admin's click (an AI call billed to the product: who asked is kept).
+        ['POST', 'campaigns/draft', 'api/v1/campaigns/draft', true],
         ['GET', 'campaigns/{uuid}', 'api/v1/campaigns/{uuid}', false],
         ['PUT', 'campaigns/{uuid}', 'api/v1/campaigns/{uuid}', true],
         ['DELETE', 'campaigns/{uuid}', 'api/v1/campaigns/{uuid}', true],

@@ -38,7 +38,7 @@ class AudienceRowsTest extends TestCase
     {
         $rows = collect(GrowthRoutes::TABLE)->filter(fn (array $r) => str_starts_with($r[1], 'campaigns'));
 
-        $this->assertCount(11, $rows);
+        $this->assertCount(12, $rows);
         foreach ($rows as [$method, $path, $upstream, $actor]) {
             $this->assertSame('api/v1/'.$path, $upstream);
             $isRead = $method === 'GET' || $path === 'campaigns/estimate';
