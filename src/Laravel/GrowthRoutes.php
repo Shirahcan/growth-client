@@ -130,6 +130,9 @@ final class GrowthRoutes
         // The designer's post details panel (growth-service v0.43.0, S3c part 2): read every field, save one.
         ['GET', 'blog/posts/{id}/document/fields', 'api/v1/blog/posts/{id}/document/fields', false],
         ['PUT', 'blog/posts/{id}/document/fields/{name}', 'api/v1/blog/posts/{id}/document/fields/{name}', true],
+        // The designer's SEO slide-in (growth-service v0.55.0, T2a): the score, the grouped checks and the search-result
+        // preview over the post's current draft. A read: no actor.
+        ['GET', 'blog/posts/{id}/document/seo', 'api/v1/blog/posts/{id}/document/seo', false],
         // S2d (growth-service v0.49.0): the LinkedIn version and "Check the writing", each ONE model call on the admin's
         // click (billed to the product: who asked is kept). Their own 90-second timeout, like campaigns/draft: a model
         // writing takes longer than the default 10, and a timeout here would read as "unreachable" while it still works.
