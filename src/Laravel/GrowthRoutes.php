@@ -107,6 +107,15 @@ final class GrowthRoutes
         ['PUT', 'blog/categories/{id}', 'api/v1/blog/categories/{id}', true],
         ['DELETE', 'blog/categories/{id}', 'api/v1/blog/categories/{id}', true],
 
+        // Blog posts (S4b, growth-service v0.39.0 S2b): list (?status, ?category, ?q pass through), readiness check,
+        // show, create, update (the revision guard answers a conflict), delete. Reads and the check carry no actor.
+        ['GET', 'blog/posts', 'api/v1/blog/posts', false],
+        ['POST', 'blog/posts', 'api/v1/blog/posts', true],
+        ['POST', 'blog/posts/readiness', 'api/v1/blog/posts/readiness', false],
+        ['GET', 'blog/posts/{id}', 'api/v1/blog/posts/{id}', false],
+        ['PUT', 'blog/posts/{id}', 'api/v1/blog/posts/{id}', true],
+        ['DELETE', 'blog/posts/{id}', 'api/v1/blog/posts/{id}', true],
+
         // Audience (G4e4a). People: list, the consent trail, the admin's two actions.
         ['GET', 'audience/subscribers', 'api/v1/audience/subscribers', false],
         ['GET', 'audience/subscribers/{uuid}', 'api/v1/audience/subscribers/{uuid}', false],

@@ -22,6 +22,19 @@ class BlogRowsTest extends TestCase
         $this->assertSame(['DELETE', 'blog/categories/{id}', 'api/v1/blog/categories/{id}', true], $rows['DELETE blog/categories/{id}']);
     }
 
+    public function test_the_post_rows_mirror_the_services_s2b_routes(): void
+    {
+        $rows = collect(GrowthRoutes::TABLE)->keyBy(fn (array $r) => $r[0].' '.$r[1]);
+
+        $this->assertSame(['GET', 'blog/posts', 'api/v1/blog/posts', false], $rows['GET blog/posts']);
+        $this->assertSame(['POST', 'blog/posts', 'api/v1/blog/posts', true], $rows['POST blog/posts']);
+        $this->assertSame(['POST', 'blog/posts/readiness', 'api/v1/blog/posts/readiness', false], $rows['POST blog/posts/readiness'], 'a check changes nothing');
+        $this->assertSame(['GET', 'blog/posts/{id}', 'api/v1/blog/posts/{id}', false], $rows['GET blog/posts/{id}']);
+        $this->assertSame(['PUT', 'blog/posts/{id}', 'api/v1/blog/posts/{id}', true], $rows['PUT blog/posts/{id}']);
+        $this->assertSame(['DELETE', 'blog/posts/{id}', 'api/v1/blog/posts/{id}', true], $rows['DELETE blog/posts/{id}']);
+        $this->assertMatchesRegularExpression('/^'.GrowthRoutes::SEGMENT.'$/', '0198f2c4-5a1b-7c3d-9e8f-0123456789ab', 'a post uuid fits a row segment');
+    }
+
     public function test_no_row_is_listed_twice(): void
     {
         $keys = array_map(fn (array $r) => $r[0].' '.$r[1], GrowthRoutes::TABLE);
