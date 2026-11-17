@@ -206,6 +206,10 @@ final class GrowthRoutes
         ['POST', 'campaigns/{uuid}/document/check', 'api/v1/campaigns/{uuid}/document/check', false],
         ['GET', 'campaigns/{uuid}/document/fields', 'api/v1/campaigns/{uuid}/document/fields', false],
         ['PUT', 'campaigns/{uuid}/document/fields/{name}', 'api/v1/campaigns/{uuid}/document/fields/{name}', true],
+        // Prepare an issue inside its template from the team's notes, the product's figures and news (growth-service N1g):
+        // the writer may take up to 100 s there, so this row waits 120. Body {text?, apply?, revision?, fields_version?,
+        // document?}; a document's text is read by the product's own server, never sent from a browser as a file.
+        ['POST', 'campaigns/{uuid}/prepare', 'api/v1/campaigns/{uuid}/prepare', true, 120],
     ];
 
     /** Query parameter naming another product to act for (estate key only, F1 rule 3). */

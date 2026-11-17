@@ -23,6 +23,13 @@ class CampaignDocumentRowsTest extends TestCase
         $this->assertSame(['PUT', 'campaigns/{uuid}/document/fields/{name}', 'api/v1/campaigns/{uuid}/document/fields/{name}', true], $rows['PUT campaigns/{uuid}/document/fields/{name}']);
     }
 
+    public function test_preparing_an_issue_waits_longer_than_its_writer_and_records_who_asked(): void
+    {
+        $rows = collect(GrowthRoutes::TABLE)->keyBy(fn (array $r) => $r[0].' '.$r[1]);
+
+        $this->assertSame(['POST', 'campaigns/{uuid}/prepare', 'api/v1/campaigns/{uuid}/prepare', true, 120], $rows['POST campaigns/{uuid}/prepare'], 'above growth-service\'s 100 s wait on the writer');
+    }
+
     public function test_a_campaign_starts_designed_through_the_create_row_it_already_has(): void
     {
         $rows = collect(GrowthRoutes::TABLE)->keyBy(fn (array $r) => $r[0].' '.$r[1]);
