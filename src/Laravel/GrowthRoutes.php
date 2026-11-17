@@ -10,6 +10,7 @@ use Shirahcan\GrowthClient\Laravel\Http\GrowthTrackController;
 use Shirahcan\GrowthClient\Laravel\Http\AnnouncementReachController;
 use Shirahcan\GrowthClient\Laravel\Http\FactsController;
 use Shirahcan\GrowthClient\Laravel\Http\PlanSourcesController;
+use Shirahcan\GrowthClient\Laravel\Http\ReviewersController;
 use Shirahcan\GrowthClient\Laravel\Http\SegmentsController;
 use Shirahcan\GrowthClient\Laravel\Http\WebhookController;
 
@@ -93,6 +94,9 @@ final class GrowthRoutes
         ['GET', 'layouts', 'api/v1/layouts', false],
         ['GET', 'layouts/{key}', 'api/v1/layouts/{key}', false],
         ['PUT', 'layouts/{key}', 'api/v1/layouts/{key}', true],
+
+        // Reviewers (B3): who may be named as a post's reviewer, read from the product by growth-service.
+        ['GET', 'reviewers', 'api/v1/reviewers', false],
 
         // Audience (G4e4a). People: list, the consent trail, the admin's two actions.
         ['GET', 'audience/subscribers', 'api/v1/audience/subscribers', false],
@@ -209,6 +213,8 @@ final class GrowthRoutes
     {
         Route::post(rtrim($uri, '/').'/facts', FactsController::class)->name('webhooks.growth-service.facts');
         Route::post(rtrim($uri, '/').'/plan-sources', PlanSourcesController::class)->name('webhooks.growth-service.plan-sources');
+        // B3: who may be named as a post's reviewer (licensed, opted in; the product fails closed).
+        Route::post(rtrim($uri, '/').'/reviewers', ReviewersController::class)->name('webhooks.growth-service.reviewers');
         // G4d1: the product's people groups (catalogue, expand to email hashes, search), signed like facts.
         Route::post(rtrim($uri, '/').'/segments', [SegmentsController::class, 'catalog'])->name('webhooks.growth-service.segments');
         Route::post(rtrim($uri, '/').'/segments/expand', [SegmentsController::class, 'expand'])->name('webhooks.growth-service.segments.expand');

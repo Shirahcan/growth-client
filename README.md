@@ -103,6 +103,17 @@ What only the product knows that Growth plans from: implement `Plan\PlanSourcesA
 gap_audiences: {assistant audience: Growth audience}}`. The service adds its Radar signals and ai-service's
 unanswered questions itself.
 
+## Reviewers (B3)
+
+Who may be named as a post's reviewer: implement `Reviewers\ReviewersAdapter` and name it in
+`growth-client.reviewers`. `webhookRoute($uri)` mounts `POST $uri/reviewers` (same signature and window as
+`/facts`), answering `{reviewers: [{id, legal_name, credential, licence_number, licence_status,
+register_read_at, opted_in_at}], register_max_age_days}`. "Reviewed by <name>, RCIC <licence>" is an
+attestation, so the product FAILS CLOSED: only currently licensed people who opted in, with a register read
+inside the stated window; never contact details. growth-service checks the answer again and stores nothing.
+`Testing\FakeReviewers::with([...])` is a fixed-list adapter for tests. The `GET reviewers` proxy row reads
+growth-service's `/v1/reviewers`.
+
 ## The public door (G4b)
 
 `GrowthRoutes::mountPublic('growth')` mounts a visitor's own confirm, preferences and unsubscribe (the

@@ -49,6 +49,13 @@ return [
     'plan_sources' => null,
 
     /*
+    | Who may be named as a post's reviewer (B3): a class implementing Reviewers\ReviewersAdapter. Only
+    | licensed people who opted in; the product fails closed. Null = the signed reviewers route answers
+    | "not available".
+    */
+    'reviewers' => null,
+
+    /*
     |--------------------------------------------------------------------------
     | People groups (G4d1)
     |--------------------------------------------------------------------------
