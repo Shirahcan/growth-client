@@ -72,6 +72,14 @@ class BlogRowsTest extends TestCase
         $this->assertSame(['POST', 'blog/posts/{id}/convert', 'api/v1/blog/posts/{id}/convert', true], $rows['POST blog/posts/{id}/convert']);
     }
 
+    public function test_the_prepare_state_row_is_a_read_without_an_actor(): void
+    {
+        $rows = collect(GrowthRoutes::TABLE)->keyBy(fn (array $r) => $r[0].' '.$r[1]);
+
+        $this->assertSame(['GET', 'blog/posts/{id}/prepare', 'api/v1/blog/posts/{id}/prepare', false], $rows['GET blog/posts/{id}/prepare']);
+        $this->assertArrayNotHasKey('POST blog/posts/{id}/prepare', $rows->all(), 'starting a prepare stays on the server of the product');
+    }
+
     public function test_no_row_is_listed_twice(): void
     {
         $keys = array_map(fn (array $r) => $r[0].' '.$r[1], GrowthRoutes::TABLE);

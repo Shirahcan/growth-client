@@ -138,6 +138,9 @@ final class GrowthRoutes
         // A post written in the plain editor becomes a design (growth-service v0.53.0, pml HtmlToPml): no model call, so
         // the default timeout. Body {dry_run?: bool}; the actor is recorded.
         ['POST', 'blog/posts/{id}/convert', 'api/v1/blog/posts/{id}/convert', true],
+        // The background prepare's state (growth-service v0.54.0): the designer polls it while a post is being prepared
+        // from a document. A read: no actor. Starting a prepare stays on the product's own server (it reads the file).
+        ['GET', 'blog/posts/{id}/prepare', 'api/v1/blog/posts/{id}/prepare', false],
 
         // Audience (G4e4a). People: list, the consent trail, the admin's two actions.
         ['GET', 'audience/subscribers', 'api/v1/audience/subscribers', false],
