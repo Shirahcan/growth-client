@@ -59,7 +59,7 @@ class KnowledgeAndRevalidateTest extends TestCase
             'id' => 'post-uuid-1', 'slug' => 'study-permits', 'title' => 'Study permits explained', 'answer' => 'Short answer.',
             'meta_description' => 'What a study permit is.', 'audience' => 'applicants', 'category' => ['slug' => 'study', 'name' => 'Study'],
             'reader_questions' => [['q' => 'How long?', 'a' => 'Weeks.']],
-            'facts' => [['label' => 'Fee', 'value' => '$150', 'review_by' => '2027-01-01', 'source_key' => 'ircc.fees.study_permit']],
+            'facts' => [['text' => 'The study permit fee is $150.', 'review_by' => '2027-01-01', 'source_key' => 'ircc.fees.study_permit']],
             'published_at' => '2026-11-17T10:00:00+00:00',
         ], $over);
     }

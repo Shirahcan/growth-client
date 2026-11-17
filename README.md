@@ -123,8 +123,9 @@ service retries with backoff and never blocks a publish on them):
   `POST $uri/knowledge/remove` `{id, reason}`. The SERVICE decides a post belongs in knowledge (published, not deleted,
   marked "add to knowledge") and sends `remove` when that stops being true; the PRODUCT decides `served` or `held` and
   owns the row. The post comes from the PUBLISHED snapshot: id, slug, title, answer, meta_description, audience,
-  category, reader_questions, facts `[{label, value, review_by, source_key}]`, published_at. No url: the product
-  builds it from the slug.
+  category, reader_questions, facts `[{text, review_by, source_key}]`, published_at. No url: the product
+  builds it from the slug. The service also sends an `event_id`; the kit does not pass it on, because a
+  product is idempotent by post id (upsert/remove) and slug (revalidate) already.
 - `Pages\RevalidateAdapter` (`growth-client.revalidate`): `POST $uri/revalidate` `{event, slug, previous_slug,
   category_slugs}`, a NEUTRAL change the product maps to its own cache. Honest, not fatal: `revalidated: false` with
   the reason.

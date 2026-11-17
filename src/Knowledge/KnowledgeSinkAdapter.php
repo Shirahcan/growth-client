@@ -21,7 +21,7 @@ use Shirahcan\GrowthClient\Facts\FactsUnavailable;
  *   - audience: applicants | employers | consultants
  *   - category: {slug, name} | null
  *   - reader_questions: [{q, a}]
- *   - facts: [{label, value, review_by: Y-m-d|null, source_key: string|null}]
+ *   - facts: [{text, review_by: Y-m-d|null, source_key: string|null}] (the shape a product's post facts hold)
  *   - published_at: ISO 8601
  * There is NO url: the product owns its public route and builds the link from `slug`.
  */
