@@ -56,6 +56,19 @@ return [
     'reviewers' => null,
 
     /*
+    | Where a published post marked "add to knowledge" becomes something the product's assistant answers from
+    | (S4a): a class implementing Knowledge\KnowledgeSinkAdapter. Null = the signed knowledge routes answer
+    | "not available".
+    */
+    'knowledge_sink' => null,
+
+    /*
+    | Drops the product's cached public pages when what readers see changes (S4a): a class implementing
+    | Pages\RevalidateAdapter. Null = the signed revalidate route answers "not available".
+    */
+    'revalidate' => null,
+
+    /*
     |--------------------------------------------------------------------------
     | People groups (G4d1)
     |--------------------------------------------------------------------------

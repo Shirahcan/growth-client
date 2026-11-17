@@ -114,6 +114,24 @@ inside the stated window; never contact details. growth-service checks the answe
 `Testing\FakeReviewers::with([...])` is a fixed-list adapter for tests. The `GET reviewers` proxy row reads
 growth-service's `/v1/reviewers`.
 
+## Knowledge sink and page revalidation (S4a)
+
+Two calls the service makes after a post changes, both signed like `/facts`, both IDEMPOTENT on the product side (the
+service retries with backoff and never blocks a publish on them):
+
+- `Knowledge\KnowledgeSinkAdapter` (`growth-client.knowledge_sink`): `POST $uri/knowledge/upsert` `{post}` and
+  `POST $uri/knowledge/remove` `{id, reason}`. The SERVICE decides a post belongs in knowledge (published, not deleted,
+  marked "add to knowledge") and sends `remove` when that stops being true; the PRODUCT decides `served` or `held` and
+  owns the row. The post comes from the PUBLISHED snapshot: id, slug, title, answer, meta_description, audience,
+  category, reader_questions, facts `[{label, value, review_by, source_key}]`, published_at. No url: the product
+  builds it from the slug.
+- `Pages\RevalidateAdapter` (`growth-client.revalidate`): `POST $uri/revalidate` `{event, slug, previous_slug,
+  category_slugs}`, a NEUTRAL change the product maps to its own cache. Honest, not fatal: `revalidated: false` with
+  the reason.
+
+`Testing\FakeKnowledgeSink` and `Testing\FakeRevalidate` record every call and can answer `held`, a failed bust, or
+not available.
+
 ## The public door (G4b)
 
 `GrowthRoutes::mountPublic('growth')` mounts a visitor's own confirm, preferences and unsubscribe (the

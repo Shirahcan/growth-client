@@ -11,6 +11,8 @@ use Shirahcan\GrowthClient\Laravel\Http\AnnouncementReachController;
 use Shirahcan\GrowthClient\Laravel\Http\FactsController;
 use Shirahcan\GrowthClient\Laravel\Http\PlanSourcesController;
 use Shirahcan\GrowthClient\Laravel\Http\ReviewersController;
+use Shirahcan\GrowthClient\Laravel\Http\KnowledgeSinkController;
+use Shirahcan\GrowthClient\Laravel\Http\RevalidateController;
 use Shirahcan\GrowthClient\Laravel\Http\SegmentsController;
 use Shirahcan\GrowthClient\Laravel\Http\WebhookController;
 
@@ -215,6 +217,10 @@ final class GrowthRoutes
         Route::post(rtrim($uri, '/').'/plan-sources', PlanSourcesController::class)->name('webhooks.growth-service.plan-sources');
         // B3: who may be named as a post's reviewer (licensed, opted in; the product fails closed).
         Route::post(rtrim($uri, '/').'/reviewers', ReviewersController::class)->name('webhooks.growth-service.reviewers');
+        // S4a (blog-on-growth-service): a published post into the product's knowledge, and its public pages refreshed.
+        Route::post(rtrim($uri, '/').'/knowledge/upsert', [KnowledgeSinkController::class, 'upsert'])->name('webhooks.growth-service.knowledge.upsert');
+        Route::post(rtrim($uri, '/').'/knowledge/remove', [KnowledgeSinkController::class, 'remove'])->name('webhooks.growth-service.knowledge.remove');
+        Route::post(rtrim($uri, '/').'/revalidate', RevalidateController::class)->name('webhooks.growth-service.revalidate');
         // G4d1: the product's people groups (catalogue, expand to email hashes, search), signed like facts.
         Route::post(rtrim($uri, '/').'/segments', [SegmentsController::class, 'catalog'])->name('webhooks.growth-service.segments');
         Route::post(rtrim($uri, '/').'/segments/expand', [SegmentsController::class, 'expand'])->name('webhooks.growth-service.segments.expand');
