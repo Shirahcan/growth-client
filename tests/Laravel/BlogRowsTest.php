@@ -55,6 +55,16 @@ class BlogRowsTest extends TestCase
         }
     }
 
+    public function test_the_writing_rows_forward_the_actor_and_wait_for_the_model(): void
+    {
+        $rows = collect(GrowthRoutes::TABLE)->keyBy(fn (array $r) => $r[0].' '.$r[1]);
+
+        foreach (['linkedin', 'proofread'] as $action) {
+            $path = 'blog/posts/{id}/'.$action;
+            $this->assertSame(['POST', $path, 'api/v1/'.$path, true, 90], $rows['POST '.$path], $action);
+        }
+    }
+
     public function test_no_row_is_listed_twice(): void
     {
         $keys = array_map(fn (array $r) => $r[0].' '.$r[1], GrowthRoutes::TABLE);
