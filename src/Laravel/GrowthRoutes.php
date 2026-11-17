@@ -135,6 +135,9 @@ final class GrowthRoutes
         // writing takes longer than the default 10, and a timeout here would read as "unreachable" while it still works.
         ['POST', 'blog/posts/{id}/linkedin', 'api/v1/blog/posts/{id}/linkedin', true, 90],
         ['POST', 'blog/posts/{id}/proofread', 'api/v1/blog/posts/{id}/proofread', true, 90],
+        // A post written in the plain editor becomes a design (growth-service v0.53.0, pml HtmlToPml): no model call, so
+        // the default timeout. Body {dry_run?: bool}; the actor is recorded.
+        ['POST', 'blog/posts/{id}/convert', 'api/v1/blog/posts/{id}/convert', true],
 
         // Audience (G4e4a). People: list, the consent trail, the admin's two actions.
         ['GET', 'audience/subscribers', 'api/v1/audience/subscribers', false],

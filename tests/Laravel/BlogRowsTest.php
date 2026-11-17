@@ -65,6 +65,13 @@ class BlogRowsTest extends TestCase
         }
     }
 
+    public function test_the_convert_row_forwards_the_actor_with_the_default_timeout(): void
+    {
+        $rows = collect(GrowthRoutes::TABLE)->keyBy(fn (array $r) => $r[0].' '.$r[1]);
+
+        $this->assertSame(['POST', 'blog/posts/{id}/convert', 'api/v1/blog/posts/{id}/convert', true], $rows['POST blog/posts/{id}/convert']);
+    }
+
     public function test_no_row_is_listed_twice(): void
     {
         $keys = array_map(fn (array $r) => $r[0].' '.$r[1], GrowthRoutes::TABLE);
