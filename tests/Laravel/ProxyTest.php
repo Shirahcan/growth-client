@@ -113,6 +113,19 @@ class ProxyTest extends TestCase
         $this->assertSame('x', $sent['title']);
     }
 
+    public function test_the_actor_is_named_by_the_users_display_name_and_falls_back_to_their_email(): void
+    {
+        $user = $this->signIn();
+        $user->forceFill(['name' => 'Ada Lovelace']);
+        $this->service([self::answer(200, ['success' => true, 'data' => []])]);
+        $this->withWriteRow();
+
+        $this->postJson('/admin/growth-service/_write', ['title' => 'x'])->assertOk();
+
+        $sent = json_decode((string) $this->history[0]['request']->getBody(), true);
+        $this->assertSame(['ref' => 'user:42', 'name' => 'Ada Lovelace'], $sent['actor'], 'a person reads the name, never the email, where one exists');
+    }
+
     public function test_a_real_plan_write_row_carries_the_sessions_actor_to_the_service(): void
     {
         $this->signIn();
