@@ -33,6 +33,8 @@ class BlogRowsTest extends TestCase
         $this->assertSame(['PUT', 'blog/posts/{id}', 'api/v1/blog/posts/{id}', true], $rows['PUT blog/posts/{id}']);
         $this->assertSame(['DELETE', 'blog/posts/{id}', 'api/v1/blog/posts/{id}', true], $rows['DELETE blog/posts/{id}']);
         $this->assertMatchesRegularExpression('/^'.GrowthRoutes::SEGMENT.'$/', '0198f2c4-5a1b-7c3d-9e8f-0123456789ab', 'a post uuid fits a row segment');
+        $this->assertSame(['POST', 'blog/posts/{id}/publish', 'api/v1/blog/posts/{id}/publish', true], $rows['POST blog/posts/{id}/publish']);
+        $this->assertSame(['POST', 'blog/posts/{id}/unpublish', 'api/v1/blog/posts/{id}/unpublish', true], $rows['POST blog/posts/{id}/unpublish']);
     }
 
     public function test_no_row_is_listed_twice(): void

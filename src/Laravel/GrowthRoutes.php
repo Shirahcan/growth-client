@@ -116,6 +116,9 @@ final class GrowthRoutes
         ['GET', 'blog/posts/{id}', 'api/v1/blog/posts/{id}', false],
         ['PUT', 'blog/posts/{id}', 'api/v1/blog/posts/{id}', true],
         ['DELETE', 'blog/posts/{id}', 'api/v1/blog/posts/{id}', true],
+        // S2c-1 (growth-service v0.41.0): publish now or at a time (optional `at` passes through), and unpublish.
+        ['POST', 'blog/posts/{id}/publish', 'api/v1/blog/posts/{id}/publish', true],
+        ['POST', 'blog/posts/{id}/unpublish', 'api/v1/blog/posts/{id}/unpublish', true],
 
         // Audience (G4e4a). People: list, the consent trail, the admin's two actions.
         ['GET', 'audience/subscribers', 'api/v1/audience/subscribers', false],
