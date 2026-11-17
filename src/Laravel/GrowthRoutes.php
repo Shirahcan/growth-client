@@ -100,6 +100,13 @@ final class GrowthRoutes
         // Reviewers (B3): who may be named as a post's reviewer, read from the product by growth-service.
         ['GET', 'reviewers', 'api/v1/reviewers', false],
 
+        // Blog categories (S4b, blog-on-growth-service; growth-service v0.37.0 S1): reads carry no actor, every change does.
+        ['GET', 'blog/categories', 'api/v1/blog/categories', false],
+        ['GET', 'blog/categories/{id}', 'api/v1/blog/categories/{id}', false],
+        ['POST', 'blog/categories', 'api/v1/blog/categories', true],
+        ['PUT', 'blog/categories/{id}', 'api/v1/blog/categories/{id}', true],
+        ['DELETE', 'blog/categories/{id}', 'api/v1/blog/categories/{id}', true],
+
         // Audience (G4e4a). People: list, the consent trail, the admin's two actions.
         ['GET', 'audience/subscribers', 'api/v1/audience/subscribers', false],
         ['GET', 'audience/subscribers/{uuid}', 'api/v1/audience/subscribers/{uuid}', false],
