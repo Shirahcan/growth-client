@@ -72,11 +72,11 @@ class BlogRowsTest extends TestCase
         $this->assertSame(['POST', 'blog/posts/{id}/convert', 'api/v1/blog/posts/{id}/convert', true], $rows['POST blog/posts/{id}/convert']);
     }
 
-    public function test_the_prepare_state_row_is_a_read_without_an_actor(): void
+    public function test_preparing_a_post_has_no_browser_row(): void
     {
         $rows = collect(GrowthRoutes::TABLE)->keyBy(fn (array $r) => $r[0].' '.$r[1]);
 
-        $this->assertSame(['GET', 'blog/posts/{id}/prepare', 'api/v1/blog/posts/{id}/prepare', false], $rows['GET blog/posts/{id}/prepare']);
+        $this->assertArrayNotHasKey('GET blog/posts/{id}/prepare', $rows->all(), 'the background prepare and its state are retired (0.27.0)');
         $this->assertArrayNotHasKey('POST blog/posts/{id}/prepare', $rows->all(), 'starting a prepare stays on the server of the product');
     }
 
