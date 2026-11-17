@@ -69,6 +69,12 @@ return [
     'revalidate' => null,
 
     /*
+    | Extra ADVISORY readiness checks this product adds to a post (S4): a class implementing
+    | Posts\PostChecksAdapter. Never a lock (the service forces required = false); null = no product checks.
+    */
+    'post_checks' => null,
+
+    /*
     |--------------------------------------------------------------------------
     | People groups (G4d1)
     |--------------------------------------------------------------------------

@@ -132,6 +132,14 @@ service retries with backoff and never blocks a publish on them):
 `Testing\FakeKnowledgeSink` and `Testing\FakeRevalidate` record every call and can answer `held`, a failed bust, or
 not available.
 
+## Product checks on a post (S4)
+
+`Posts\PostChecksAdapter` (`growth-client.post_checks`): `POST $uri/posts/checks` `{post: {id, title, author_name,
+cta_kind, cta_ref, audience, category_slug}}` answers `{checks: [{key, label, hint, ok, required, weight}]}`, each item
+normalised here (malformed items dropped). ADVISORY, NEVER A LOCK: the service forces `required = false` (a post locks
+on its structure only) and treats an absent port, 503, a 3-second timeout or a bad answer as "no product checks".
+`Testing\FakePostChecks::with([...])` answers a fixed list.
+
 ## The public door (G4b)
 
 `GrowthRoutes::mountPublic('growth')` mounts a visitor's own confirm, preferences and unsubscribe (the
