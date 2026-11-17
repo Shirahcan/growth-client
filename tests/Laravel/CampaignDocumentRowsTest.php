@@ -19,6 +19,7 @@ class CampaignDocumentRowsTest extends TestCase
         $this->assertSame(['PUT', 'campaigns/{uuid}/document', 'api/v1/campaigns/{uuid}/document', true], $rows['PUT campaigns/{uuid}/document']);
         $this->assertSame(['POST', 'campaigns/{uuid}/document/preview', 'api/v1/campaigns/{uuid}/document/preview', false], $rows['POST campaigns/{uuid}/document/preview'], 'a preview changes nothing');
         $this->assertSame(['POST', 'campaigns/{uuid}/document/check', 'api/v1/campaigns/{uuid}/document/check', false], $rows['POST campaigns/{uuid}/document/check']);
+        $this->assertSame(['GET', 'campaigns/{uuid}/document/sent', 'api/v1/campaigns/{uuid}/document/sent', false], $rows['GET campaigns/{uuid}/document/sent'], '"As sent" is a read');
         $this->assertSame(['GET', 'campaigns/{uuid}/document/fields', 'api/v1/campaigns/{uuid}/document/fields', false], $rows['GET campaigns/{uuid}/document/fields']);
         $this->assertSame(['PUT', 'campaigns/{uuid}/document/fields/{name}', 'api/v1/campaigns/{uuid}/document/fields/{name}', true], $rows['PUT campaigns/{uuid}/document/fields/{name}']);
     }

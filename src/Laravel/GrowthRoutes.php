@@ -204,6 +204,8 @@ final class GrowthRoutes
         ['PUT', 'campaigns/{uuid}/document', 'api/v1/campaigns/{uuid}/document', true],
         ['POST', 'campaigns/{uuid}/document/preview', 'api/v1/campaigns/{uuid}/document/preview', false],
         ['POST', 'campaigns/{uuid}/document/check', 'api/v1/campaigns/{uuid}/document/check', false],
+        // The email exactly as a reader receives it now ({html, text, subject}), for the editor's "As sent" view. A read.
+        ['GET', 'campaigns/{uuid}/document/sent', 'api/v1/campaigns/{uuid}/document/sent', false],
         ['GET', 'campaigns/{uuid}/document/fields', 'api/v1/campaigns/{uuid}/document/fields', false],
         ['PUT', 'campaigns/{uuid}/document/fields/{name}', 'api/v1/campaigns/{uuid}/document/fields/{name}', true],
         // Prepare an issue inside its template from the team's notes, the product's figures and news (growth-service N1g):
