@@ -37,6 +37,24 @@ class BlogRowsTest extends TestCase
         $this->assertSame(['POST', 'blog/posts/{id}/unpublish', 'api/v1/blog/posts/{id}/unpublish', true], $rows['POST blog/posts/{id}/unpublish']);
     }
 
+    public function test_the_document_rows_mirror_the_services_s3c_routes(): void
+    {
+        $rows = collect(GrowthRoutes::TABLE)->keyBy(fn (array $r) => $r[0].' '.$r[1]);
+
+        foreach ([
+            ['GET', 'blog/posts/{id}/document', false],
+            ['PUT', 'blog/posts/{id}/document', true],
+            ['POST', 'blog/posts/{id}/document/preview', false],
+            ['POST', 'blog/posts/{id}/document/check', false],
+            ['POST', 'blog/posts/{id}/document/publish', true],
+            ['DELETE', 'blog/posts/{id}/document/draft', true],
+            ['GET', 'blog/posts/{id}/document/fields', false],
+            ['PUT', 'blog/posts/{id}/document/fields/{name}', true],
+        ] as [$method, $path, $actor]) {
+            $this->assertSame([$method, $path, 'api/v1/'.$path, $actor], $rows[$method.' '.$path], $method.' '.$path);
+        }
+    }
+
     public function test_no_row_is_listed_twice(): void
     {
         $keys = array_map(fn (array $r) => $r[0].' '.$r[1], GrowthRoutes::TABLE);

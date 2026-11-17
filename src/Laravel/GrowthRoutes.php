@@ -119,6 +119,17 @@ final class GrowthRoutes
         // S2c-1 (growth-service v0.41.0): publish now or at a time (optional `at` passes through), and unpublish.
         ['POST', 'blog/posts/{id}/publish', 'api/v1/blog/posts/{id}/publish', true],
         ['POST', 'blog/posts/{id}/unpublish', 'api/v1/blog/posts/{id}/unpublish', true],
+        // The designed post as a document for the shared page editor (growth-service v0.42.0, S3c). Reads, previews and
+        // checks carry no actor; saving, publishing and discarding the draft carry one.
+        ['GET', 'blog/posts/{id}/document', 'api/v1/blog/posts/{id}/document', false],
+        ['PUT', 'blog/posts/{id}/document', 'api/v1/blog/posts/{id}/document', true],
+        ['POST', 'blog/posts/{id}/document/preview', 'api/v1/blog/posts/{id}/document/preview', false],
+        ['POST', 'blog/posts/{id}/document/check', 'api/v1/blog/posts/{id}/document/check', false],
+        ['POST', 'blog/posts/{id}/document/publish', 'api/v1/blog/posts/{id}/document/publish', true],
+        ['DELETE', 'blog/posts/{id}/document/draft', 'api/v1/blog/posts/{id}/document/draft', true],
+        // The designer's post details panel (growth-service v0.43.0, S3c part 2): read every field, save one.
+        ['GET', 'blog/posts/{id}/document/fields', 'api/v1/blog/posts/{id}/document/fields', false],
+        ['PUT', 'blog/posts/{id}/document/fields/{name}', 'api/v1/blog/posts/{id}/document/fields/{name}', true],
 
         // Audience (G4e4a). People: list, the consent trail, the admin's two actions.
         ['GET', 'audience/subscribers', 'api/v1/audience/subscribers', false],
