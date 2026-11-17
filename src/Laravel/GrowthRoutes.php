@@ -196,6 +196,14 @@ final class GrowthRoutes
         ['POST', 'campaigns/{uuid}/send', 'api/v1/campaigns/{uuid}/send', true],
         ['POST', 'campaigns/{uuid}/cancel', 'api/v1/campaigns/{uuid}/cancel', true],
         ['POST', 'campaigns/{uuid}/test', 'api/v1/campaigns/{uuid}/test', true],
+        // A designed newsletter in the shared email editor (growth-service N1b): the post document's rows, for a campaign.
+        // Reads and previews carry no actor; a save does. A campaign starts designed with `layout_key` on POST campaigns.
+        ['GET', 'campaigns/{uuid}/document', 'api/v1/campaigns/{uuid}/document', false],
+        ['PUT', 'campaigns/{uuid}/document', 'api/v1/campaigns/{uuid}/document', true],
+        ['POST', 'campaigns/{uuid}/document/preview', 'api/v1/campaigns/{uuid}/document/preview', false],
+        ['POST', 'campaigns/{uuid}/document/check', 'api/v1/campaigns/{uuid}/document/check', false],
+        ['GET', 'campaigns/{uuid}/document/fields', 'api/v1/campaigns/{uuid}/document/fields', false],
+        ['PUT', 'campaigns/{uuid}/document/fields/{name}', 'api/v1/campaigns/{uuid}/document/fields/{name}', true],
     ];
 
     /** Query parameter naming another product to act for (estate key only, F1 rule 3). */

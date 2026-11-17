@@ -38,10 +38,11 @@ class AudienceRowsTest extends TestCase
     {
         $rows = collect(GrowthRoutes::TABLE)->filter(fn (array $r) => str_starts_with($r[1], 'campaigns'));
 
-        $this->assertCount(12, $rows);
+        $this->assertCount(18, $rows); // 12 + the designed newsletter's 6 (N1d)
         foreach ($rows as [$method, $path, $upstream, $actor]) {
             $this->assertSame('api/v1/'.$path, $upstream);
-            $isRead = $method === 'GET' || $path === 'campaigns/estimate';
+            // A preview or a check of a design is a POST that changes nothing, like the estimate.
+            $isRead = $method === 'GET' || in_array($path, ['campaigns/estimate', 'campaigns/{uuid}/document/preview', 'campaigns/{uuid}/document/check'], true);
             $this->assertSame(! $isRead, $actor, "{$method} {$path}");
         }
     }
