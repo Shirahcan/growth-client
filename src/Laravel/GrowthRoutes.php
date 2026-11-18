@@ -113,6 +113,8 @@ final class GrowthRoutes
         ['GET', 'blog/posts', 'api/v1/blog/posts', false],
         ['POST', 'blog/posts', 'api/v1/blog/posts', true],
         ['POST', 'blog/posts/readiness', 'api/v1/blog/posts/readiness', false],
+        // The post list's Score column (owner 2026-11-18): each listed post's search score, a read (0.30.1).
+        ['POST', 'blog/posts/scores', 'api/v1/blog/posts/scores', false],
         ['GET', 'blog/posts/{id}', 'api/v1/blog/posts/{id}', false],
         ['PUT', 'blog/posts/{id}', 'api/v1/blog/posts/{id}', true],
         ['DELETE', 'blog/posts/{id}', 'api/v1/blog/posts/{id}', true],

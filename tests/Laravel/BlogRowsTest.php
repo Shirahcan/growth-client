@@ -29,6 +29,7 @@ class BlogRowsTest extends TestCase
         $this->assertSame(['GET', 'blog/posts', 'api/v1/blog/posts', false], $rows['GET blog/posts']);
         $this->assertSame(['POST', 'blog/posts', 'api/v1/blog/posts', true], $rows['POST blog/posts']);
         $this->assertSame(['POST', 'blog/posts/readiness', 'api/v1/blog/posts/readiness', false], $rows['POST blog/posts/readiness'], 'a check changes nothing');
+        $this->assertSame(['POST', 'blog/posts/scores', 'api/v1/blog/posts/scores', false], $rows['POST blog/posts/scores'], 'a score changes nothing');
         $this->assertSame(['GET', 'blog/posts/{id}', 'api/v1/blog/posts/{id}', false], $rows['GET blog/posts/{id}']);
         $this->assertSame(['PUT', 'blog/posts/{id}', 'api/v1/blog/posts/{id}', true], $rows['PUT blog/posts/{id}']);
         $this->assertSame(['DELETE', 'blog/posts/{id}', 'api/v1/blog/posts/{id}', true], $rows['DELETE blog/posts/{id}']);
