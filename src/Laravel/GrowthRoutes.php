@@ -104,6 +104,17 @@ final class GrowthRoutes
         ['GET', 'layouts', 'api/v1/layouts', false],
         ['GET', 'layouts/{key}', 'api/v1/layouts/{key}', false],
         ['PUT', 'layouts/{key}', 'api/v1/layouts/{key}', true],
+        // Growth templates (growth-service, 2026-11-20): create (blank or a copy), retire and restore (B1); a template
+        // made from a post or a newsletter (B2); a template opened and saved like a document (B3); the template as a
+        // reader would see a post or email made from it (B4).
+        ['POST', 'layouts', 'api/v1/layouts', true],
+        ['POST', 'layouts/{key}/retire', 'api/v1/layouts/{key}/retire', true],
+        ['POST', 'layouts/{key}/restore', 'api/v1/layouts/{key}/restore', true],
+        ['POST', 'layouts/from-post/{post}', 'api/v1/layouts/from-post/{post}', true],
+        ['POST', 'layouts/from-campaign/{campaign}', 'api/v1/layouts/from-campaign/{campaign}', true],
+        ['GET', 'layouts/{key}/document', 'api/v1/layouts/{key}/document', false],
+        ['PUT', 'layouts/{key}/document', 'api/v1/layouts/{key}/document', true],
+        ['GET', 'layouts/{key}/reader-preview', 'api/v1/layouts/{key}/reader-preview', false],
 
         // Reviewers (B3): who may be named as a post's reviewer, read from the product by growth-service.
         ['GET', 'reviewers', 'api/v1/reviewers', false],
