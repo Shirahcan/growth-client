@@ -26,6 +26,19 @@ interface GrowthClient
     public function whoami(): array;
 
     /**
+     * Add a picture to the product's Growth picture library (public images plan, P3): the file is read from THIS
+     * server (a browser never sends a file through the proxy), stored in documents-service's public picture store, and
+     * given an address on `$origin` (the product's own domain). `$actor` is who added it (the product's session).
+     * `$sourceUrl` names the old address a backfill copied it from, so a re-run copies nothing twice.
+     *
+     * @param  array{ref: string, name: string}  $actor
+     * @return array{media: array<string, mixed>, quota: array<string, int>}
+     *
+     * @throws Exceptions\GrowthRequestRejected with the sentence the person reads (not a picture, library full)
+     */
+    public function uploadMedia(string $path, string $name, string $origin, array $actor, ?string $alt = null, ?string $sourceUrl = null): array;
+
+    /**
      * A client that acts for another product with `?as_product=` (F1 rule 3). Only the estate key may;
      * a product key gets a {@see GrowthServiceException} with code `forbidden`. Returns a NEW client:
      * the original keeps acting for its own product.

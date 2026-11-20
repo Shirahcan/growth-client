@@ -25,6 +25,14 @@ return [
     'timeout' => (int) env('GROWTH_SERVICE_TIMEOUT', 10),
 
     /*
+    | The product's own public web address, which every Growth picture's address starts with
+    | ({origin}/media/{id}.{ext}, forwarded by the product to documents-service). Written into posts and sent
+    | newsletters, so it must be the product's real public origin. Empty: the product falls back to its own
+    | frontend URL (Portify: app.frontend_url).
+    */
+    'media_origin' => env('GROWTH_MEDIA_ORIGIN', ''),
+
+    /*
     | The secret growth-service signs this product's callbacks with (base64, printed once by the
     | service). Empty = the receiver refuses everything: the signature is its whole defence.
     */

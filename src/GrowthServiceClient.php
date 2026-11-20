@@ -75,6 +75,56 @@ class GrowthServiceClient implements GrowthClient
         return ['status' => $response->getStatusCode(), 'body' => is_array($json) ? $json : []];
     }
 
+    public function uploadMedia(string $path, string $name, string $origin, array $actor, ?string $alt = null, ?string $sourceUrl = null): array
+    {
+        // A picture is at most the platform's 5 MB, so its bytes travel as a string: no handle to keep open or close.
+        $bytes = is_file($path) ? @file_get_contents($path) : false;
+        if ($bytes === false) {
+            throw new GrowthServiceUnavailable("The picture at [{$path}] could not be read.", 'unreadable_file', 0);
+        }
+
+        $parts = [
+            ['name' => 'image', 'contents' => $bytes, 'filename' => $name],
+            ['name' => 'origin', 'contents' => $origin],
+            ['name' => 'actor[ref]', 'contents' => (string) ($actor['ref'] ?? '')],
+            ['name' => 'actor[name]', 'contents' => (string) ($actor['name'] ?? '')],
+        ];
+        foreach (['alt' => $alt, 'source_url' => $sourceUrl] as $field => $value) {
+            if ($value !== null && $value !== '') {
+                $parts[] = ['name' => $field, 'contents' => $value];
+            }
+        }
+
+        $options = [
+            'headers' => ['Authorization' => 'Bearer '.$this->trustKey, 'Accept' => 'application/json'],
+            'http_errors' => false,
+            'multipart' => $parts,
+            // documents-service re-encodes the picture: give the upload room beyond the client's default.
+            'timeout' => max($this->timeout, 60),
+        ];
+        if ($this->asProduct !== null) {
+            $options['query'] = ['as_product' => $this->asProduct];
+        }
+
+        try {
+            $response = $this->http->request('POST', 'api/v1/media', $options);
+        } catch (ConnectException $e) {
+            throw new GrowthServiceUnavailable('growth-service is unreachable: '.$e->getMessage(), 'unreachable', 0);
+        } catch (GuzzleException $e) {
+            throw new GrowthServiceUnavailable('growth-service request failed: '.$e->getMessage(), 'transport', 0);
+        }
+
+        $json = json_decode((string) $response->getBody(), true);
+        $json = is_array($json) ? $json : [];
+        $status = $response->getStatusCode();
+
+        if ($status >= 200 && $status < 300) {
+            return (array) ($json['data'] ?? []);
+        }
+
+        throw self::errorFor($response, $json);
+    }
+
     public function whoami(): array
     {
         $json = $this->send('GET', 'api/v1/whoami');

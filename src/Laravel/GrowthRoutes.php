@@ -85,6 +85,13 @@ final class GrowthRoutes
         ['PUT', 'ctas/{id}', 'api/v1/ctas/{id}', true],
         ['DELETE', 'ctas/{id}', 'api/v1/ctas/{id}', true],
 
+        // The product's Growth picture library (public images plan, P3). Adding one is NOT a row: the file goes from
+        // the product's server through GrowthClient::uploadMedia(), never through this JSON proxy.
+        ['GET', 'media', 'api/v1/media', false],
+        ['GET', 'media/{id}', 'api/v1/media/{id}', false],
+        ['PATCH', 'media/{id}', 'api/v1/media/{id}', true],
+        ['DELETE', 'media/{id}', 'api/v1/media/{id}', true],
+
         // The story bank (B5): consented, anonymised, verified client stories; `?pickable=1` lists what a part may show.
         ['GET', 'stories', 'api/v1/stories', false],
         ['GET', 'stories/{id}', 'api/v1/stories/{id}', false],

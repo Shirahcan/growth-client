@@ -3,6 +3,7 @@
 namespace Shirahcan\GrowthClient\Testing;
 
 use Shirahcan\GrowthClient\Exceptions\GrowthNotFound;
+use Shirahcan\GrowthClient\Exceptions\GrowthRequestRejected;
 use Shirahcan\GrowthClient\Exceptions\GrowthServiceException;
 use Shirahcan\GrowthClient\GrowthClient;
 
@@ -51,6 +52,59 @@ class FakeGrowth implements GrowthClient
         $this->record(__FUNCTION__);
 
         return ['product' => $this->product, 'acting_product' => $this->acting];
+    }
+
+    /** @var \ArrayObject<int, array<string, mixed>> pictures added through uploadMedia, newest last */
+    public \ArrayObject $media;
+
+    /** The next uploadMedia answers with this refusal (the store's or the library's sentence), once. */
+    public ?string $refuseNextUpload = null;
+
+    public function uploadMedia(string $path, string $name, string $origin, array $actor, ?string $alt = null, ?string $sourceUrl = null): array
+    {
+        $this->record(__FUNCTION__, [$path, $name, $origin, $actor, $alt, $sourceUrl]);
+        $this->media ??= new \ArrayObject;
+
+        if ($this->refuseNextUpload !== null) {
+            $message = $this->refuseNextUpload;
+            $this->refuseNextUpload = null;
+            throw new GrowthRequestRejected($message, 'invalid', 422);
+        }
+
+        foreach ($this->media as $row) {
+            if ($sourceUrl !== null && ($row['source_url'] ?? null) === $sourceUrl) {
+                return ['media' => $row, 'quota' => $this->mediaQuota()];
+            }
+        }
+
+        $id = sprintf('%08x-0000-4000-8000-%012x', count($this->media) + 1, crc32($name));
+        $row = [
+            'id' => $id,
+            'url' => rtrim($origin, '/').'/media/'.$id.'.jpg',
+            'mime' => 'image/jpeg',
+            'bytes' => is_file($path) ? (int) filesize($path) : 0,
+            'width' => null,
+            'height' => null,
+            'alt' => $alt,
+            'source_url' => $sourceUrl,
+            'created_by' => $actor['ref'] ?? null,
+        ];
+        $this->media[] = $row;
+
+        return ['media' => $row, 'quota' => $this->mediaQuota()];
+    }
+
+    /** @return array{bytes_used: int, bytes_limit: int, files_used: int, files_limit: int} */
+    private function mediaQuota(): array
+    {
+        $rows = iterator_to_array($this->media ?? new \ArrayObject);
+
+        return [
+            'bytes_used' => array_sum(array_column($rows, 'bytes')),
+            'bytes_limit' => 1073741824,
+            'files_used' => count($rows),
+            'files_limit' => 500,
+        ];
     }
 
     public function asProduct(string $product): static
