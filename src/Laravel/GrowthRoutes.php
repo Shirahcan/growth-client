@@ -115,6 +115,14 @@ final class GrowthRoutes
         ['GET', 'layouts/{key}/document', 'api/v1/layouts/{key}/document', false],
         ['PUT', 'layouts/{key}/document', 'api/v1/layouts/{key}/document', true],
         ['GET', 'layouts/{key}/reader-preview', 'api/v1/layouts/{key}/reader-preview', false],
+        // Growth templates E3: edits wait in a draft; "Save for new posts" (publish) makes the next version, and posts
+        // keep the version they started from. Details: the name and each part's label, need and count.
+        ['POST', 'layouts/{key}/document/preview', 'api/v1/layouts/{key}/document/preview', false],
+        ['POST', 'layouts/{key}/document/check', 'api/v1/layouts/{key}/document/check', false],
+        ['POST', 'layouts/{key}/document/publish', 'api/v1/layouts/{key}/document/publish', true],
+        ['DELETE', 'layouts/{key}/document/draft', 'api/v1/layouts/{key}/document/draft', true],
+        ['GET', 'layouts/{key}/document/fields', 'api/v1/layouts/{key}/document/fields', false],
+        ['PUT', 'layouts/{key}/document/fields/{name}', 'api/v1/layouts/{key}/document/fields/{name}', true],
 
         // Reviewers (B3): who may be named as a post's reviewer, read from the product by growth-service.
         ['GET', 'reviewers', 'api/v1/reviewers', false],

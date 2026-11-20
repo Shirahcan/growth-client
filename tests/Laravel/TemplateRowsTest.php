@@ -23,5 +23,12 @@ class TemplateRowsTest extends TestCase
         $this->assertSame(['GET', 'layouts/{key}/document', 'api/v1/layouts/{key}/document', false], $rows['GET layouts/{key}/document']);
         $this->assertSame(['PUT', 'layouts/{key}/document', 'api/v1/layouts/{key}/document', true], $rows['PUT layouts/{key}/document']);
         $this->assertSame(['GET', 'layouts/{key}/reader-preview', 'api/v1/layouts/{key}/reader-preview', false], $rows['GET layouts/{key}/reader-preview']);
+        // E3: the draft, its checks and canvas, "Save for new posts", and the details.
+        $this->assertSame(['POST', 'layouts/{key}/document/preview', 'api/v1/layouts/{key}/document/preview', false], $rows['POST layouts/{key}/document/preview']);
+        $this->assertSame(['POST', 'layouts/{key}/document/check', 'api/v1/layouts/{key}/document/check', false], $rows['POST layouts/{key}/document/check']);
+        $this->assertSame(['POST', 'layouts/{key}/document/publish', 'api/v1/layouts/{key}/document/publish', true], $rows['POST layouts/{key}/document/publish']);
+        $this->assertSame(['DELETE', 'layouts/{key}/document/draft', 'api/v1/layouts/{key}/document/draft', true], $rows['DELETE layouts/{key}/document/draft']);
+        $this->assertSame(['GET', 'layouts/{key}/document/fields', 'api/v1/layouts/{key}/document/fields', false], $rows['GET layouts/{key}/document/fields']);
+        $this->assertSame(['PUT', 'layouts/{key}/document/fields/{name}', 'api/v1/layouts/{key}/document/fields/{name}', true], $rows['PUT layouts/{key}/document/fields/{name}']);
     }
 }
