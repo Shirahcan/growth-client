@@ -141,6 +141,19 @@ class ProxyTest extends TestCase
         $this->assertSame('2026-11-20', $sent['planned_for']);
     }
 
+    public function test_a_design_reaches_the_service_as_sent_with_its_empty_words_and_spaces(): void
+    {
+        $this->signIn();
+        $this->service([self::answer(200, ['data' => ['tree' => []]])]);
+        $nodes = [['primitive' => 'p', 'children' => [['primitive' => 'text', 'props' => ['value' => '']], ['primitive' => 'text', 'props' => ['value' => 'Apply ']]]],
+            ['primitive' => 'table', 'props' => ['title' => '']]];
+
+        $this->postJson('/admin/growth-service/blog/posts/11111111-1111-4111-8111-111111111111/document/preview', ['nodes' => $nodes])->assertOk();
+
+        $sent = json_decode((string) $this->history[0]['request']->getBody(), true);
+        $this->assertSame($nodes, $sent['nodes'], 'an empty word stays "" (never null) and a space stays, whatever the product\'s global middleware did');
+    }
+
     public function test_a_read_row_never_carries_an_actor_or_a_body(): void
     {
         $this->service([self::answer(200, ['product' => 'portify', 'acting_product' => null])]);

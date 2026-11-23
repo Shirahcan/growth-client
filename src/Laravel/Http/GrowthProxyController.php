@@ -48,7 +48,7 @@ final class GrowthProxyController
         $actsFor = $query[GrowthRoutes::AS_PRODUCT] ?? null;
         $estate = is_string($actsFor) && $actsFor !== '';
 
-        $body = $method === 'GET' ? [] : $request->json()->all();
+        $body = $method === 'GET' ? [] : self::sentBody($request);
         unset($body['actor']); // ⚠ never the browser's
         if ($withActor) {
             $who = $actor->resolve($request);
@@ -80,5 +80,23 @@ final class GrowthProxyController
         }
 
         return new JsonResponse($result['body'], $result['status']);
+    }
+
+    /**
+     * The JSON body exactly as the browser sent it (0.33.1, 2026-11-23).
+     *
+     * ⚠ NEVER `$request->json()`: the product's global TrimStrings and ConvertEmptyStringsToNull have already rewritten
+     * it, so a design's empty word ("") reached the service as null and its preview failed the PML schema ('"value" must
+     * be a string'; Portify's TEST canvas then drew every section as its name only). growth-service cleans its own input
+     * and leaves a design as sent (its DesignBody), so the proxy forwards what it was given.
+     *
+     * @return array<string, mixed>
+     */
+    private static function sentBody(Request $request): array
+    {
+        $raw = (string) $request->getContent();
+        $decoded = $raw === '' ? null : json_decode($raw, true);
+
+        return is_array($decoded) ? $decoded : $request->json()->all();
     }
 }
