@@ -87,6 +87,9 @@ class BlogRowsTest extends TestCase
         $this->assertSame(['GET', 'blog/posts/{id}/versions', 'api/v1/blog/posts/{id}/versions', false], $rows['GET blog/posts/{id}/versions']);
         $this->assertSame(['POST', 'blog/posts/{id}/versions/{version}/restore', 'api/v1/blog/posts/{id}/versions/{version}/restore', true],
             $rows['POST blog/posts/{id}/versions/{version}/restore']);
+        // A compare saves nothing: no actor.
+        $this->assertSame(['POST', 'blog/posts/{id}/versions/{version}/compare', 'api/v1/blog/posts/{id}/versions/{version}/compare', false],
+            $rows['POST blog/posts/{id}/versions/{version}/compare']);
     }
 
     public function test_preparing_a_post_has_no_browser_row(): void

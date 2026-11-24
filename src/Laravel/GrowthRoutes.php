@@ -165,6 +165,9 @@ final class GrowthRoutes
         // and putting one back in the DRAFT (never live; the actor is recorded, the revision guard answers a conflict).
         ['GET', 'blog/posts/{id}/versions', 'api/v1/blog/posts/{id}/versions', false],
         ['POST', 'blog/posts/{id}/versions/{version}/restore', 'api/v1/blog/posts/{id}/versions/{version}/restore', true],
+        // One version beside the editor's design (growth-service v0.61.0, versions-compare P2a): the editor sends what it
+        // holds, nothing is saved, so no actor.
+        ['POST', 'blog/posts/{id}/versions/{version}/compare', 'api/v1/blog/posts/{id}/versions/{version}/compare', false],
         // S2d (growth-service v0.49.0): the LinkedIn version and "Check the writing", each ONE model call on the admin's
         // click (billed to the product: who asked is kept). Their own 90-second timeout, like campaigns/draft: a model
         // writing takes longer than the default 10, and a timeout here would read as "unreachable" while it still works.
