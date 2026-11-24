@@ -80,6 +80,15 @@ class BlogRowsTest extends TestCase
         $this->assertSame(['GET', 'blog/posts/{id}/document/seo', 'api/v1/blog/posts/{id}/document/seo', false], $rows['GET blog/posts/{id}/document/seo']);
     }
 
+    public function test_the_versions_rows_list_without_an_actor_and_restore_with_one(): void
+    {
+        $rows = collect(GrowthRoutes::TABLE)->keyBy(fn (array $r) => $r[0].' '.$r[1]);
+
+        $this->assertSame(['GET', 'blog/posts/{id}/versions', 'api/v1/blog/posts/{id}/versions', false], $rows['GET blog/posts/{id}/versions']);
+        $this->assertSame(['POST', 'blog/posts/{id}/versions/{version}/restore', 'api/v1/blog/posts/{id}/versions/{version}/restore', true],
+            $rows['POST blog/posts/{id}/versions/{version}/restore']);
+    }
+
     public function test_preparing_a_post_has_no_browser_row(): void
     {
         $rows = collect(GrowthRoutes::TABLE)->keyBy(fn (array $r) => $r[0].' '.$r[1]);

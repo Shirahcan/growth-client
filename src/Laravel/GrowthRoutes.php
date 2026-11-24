@@ -161,6 +161,10 @@ final class GrowthRoutes
         // The designer's SEO slide-in (growth-service v0.55.0, T2a): the score, the grouped checks and the search-result
         // preview over the post's current draft. A read: no actor.
         ['GET', 'blog/posts/{id}/document/seo', 'api/v1/blog/posts/{id}/document/seo', false],
+        // A designed post's earlier versions (growth-service, close-multi-pass-gaps P7b): the Versions panel's list (a read)
+        // and putting one back in the DRAFT (never live; the actor is recorded, the revision guard answers a conflict).
+        ['GET', 'blog/posts/{id}/versions', 'api/v1/blog/posts/{id}/versions', false],
+        ['POST', 'blog/posts/{id}/versions/{version}/restore', 'api/v1/blog/posts/{id}/versions/{version}/restore', true],
         // S2d (growth-service v0.49.0): the LinkedIn version and "Check the writing", each ONE model call on the admin's
         // click (billed to the product: who asked is kept). Their own 90-second timeout, like campaigns/draft: a model
         // writing takes longer than the default 10, and a timeout here would read as "unreachable" while it still works.
