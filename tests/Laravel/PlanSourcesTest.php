@@ -66,8 +66,9 @@ class PlanSourcesTest extends TestCase
     {
         $rows = collect(GrowthRoutes::TABLE)->keyBy(fn (array $r) => $r[0].' '.$r[1]);
 
-        $this->assertSame(['POST', 'plan/ideas/more', 'api/v1/plan/ideas/more', true], $rows['POST plan/ideas/more']);
-        $this->assertSame(['POST', 'watched-sources/{id}/check', 'api/v1/watched-sources/{id}/check', true], $rows['POST watched-sources/{id}/check']);
+        // 0.35.1: each with its own timeout, longer than the work it waits for (a model writing; a page read in 20 s).
+        $this->assertSame(['POST', 'plan/ideas/more', 'api/v1/plan/ideas/more', true, 90], $rows['POST plan/ideas/more']);
+        $this->assertSame(['POST', 'watched-sources/{id}/check', 'api/v1/watched-sources/{id}/check', true, 45], $rows['POST watched-sources/{id}/check']);
         $this->assertSame(['PUT', 'settings/radar', 'api/v1/settings/radar', true], $rows['PUT settings/radar']);
         $this->assertFalse($rows['GET settings/radar'][3]);
         // The brand kit (G2e): read without an actor, saved with one.

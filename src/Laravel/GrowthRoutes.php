@@ -50,7 +50,10 @@ final class GrowthRoutes
         // Plan and Radar (G3a). Every write records who decided (actor).
         ['GET', 'plan/ideas', 'api/v1/plan/ideas', false],
         // "Suggest more" (G3d3): an explicit ask, so ideas are written even if some were made today.
-        ['POST', 'plan/ideas/more', 'api/v1/plan/ideas/more', true],
+        // (0.35.1) "Suggest more" writes ideas with a model: its own 90 seconds, like the other model rows. At the default
+        // 10 it read as "Growth is briefly unavailable" while the service was still writing (Porter's operation card,
+        // 2026-11-25).
+        ['POST', 'plan/ideas/more', 'api/v1/plan/ideas/more', true, 90],
         ['GET', 'plan/ideas/{uuid}', 'api/v1/plan/ideas/{uuid}', false],
         ['POST', 'plan/ideas/{uuid}/accept', 'api/v1/plan/ideas/{uuid}/accept', true],
         ['POST', 'plan/ideas/{uuid}/skip', 'api/v1/plan/ideas/{uuid}/skip', true],
@@ -67,7 +70,9 @@ final class GrowthRoutes
         ['POST', 'watched-sources', 'api/v1/watched-sources', true],
         ['PUT', 'watched-sources/{id}', 'api/v1/watched-sources/{id}', true],
         ['DELETE', 'watched-sources/{id}', 'api/v1/watched-sources/{id}', true],
-        ['POST', 'watched-sources/{id}/check', 'api/v1/watched-sources/{id}/check', true],
+        // (0.35.1) Checking reads the watched page itself, which growth-service allows 20 seconds: 45 here, so the proxy never
+        // gives up first and reports "unavailable" for a check that finished.
+        ['POST', 'watched-sources/{id}/check', 'api/v1/watched-sources/{id}/check', true, 45],
 
         // The radar's settings (G3e5): on/off, tracked countries, thresholds, cadence.
         ['GET', 'settings/radar', 'api/v1/settings/radar', false],
