@@ -75,6 +75,20 @@ class ProxyTest extends TestCase
         $this->assertSame('/api/v1/whoami', $this->history[0]['request']->getUri()->getPath());
     }
 
+    public function test_results_rows_carry_the_period_and_a_settings_change_carries_the_actor(): void
+    {
+        $this->signIn();
+        $this->service([self::answer(200, ['success' => true, 'data' => ['period' => 'month']]), self::answer(200, ['success' => true, 'data' => []])]);
+
+        $this->getJson('/admin/growth-service/results?period=month')->assertOk();
+        $this->assertSame('/api/v1/results', $this->history[0]['request']->getUri()->getPath());
+        $this->assertSame('period=month', $this->history[0]['request']->getUri()->getQuery());
+
+        $this->putJson('/admin/growth-service/settings/results', ['ai_hosts' => ['chatgpt.com']])->assertOk();
+        $sent = json_decode((string) $this->history[1]['request']->getBody(), true);
+        $this->assertSame('user:42', $sent['actor']['ref']);
+    }
+
     public function test_a_slow_row_waits_its_own_timeout_and_every_other_row_keeps_the_clients(): void
     {
         $this->signIn();

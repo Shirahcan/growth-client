@@ -79,6 +79,12 @@ final class GrowthRoutes
         ['GET', 'settings/radar', 'api/v1/settings/radar', false],
         ['PUT', 'settings/radar', 'api/v1/settings/radar', true],
 
+        // Results (G6a4): the numbers a Results tab shows, and the AI host list views are classified with.
+        ['GET', 'results', 'api/v1/results', false],
+        ['GET', 'results/posts', 'api/v1/results/posts', false],
+        ['GET', 'settings/results', 'api/v1/settings/results', false],
+        ['PUT', 'settings/results', 'api/v1/settings/results', true],
+
         // The brand kit (G2e): name, logo, colours, fonts, legal links; the sender is shown read-only.
         ['GET', 'settings/brand', 'api/v1/settings/brand', false],
         ['PUT', 'settings/brand', 'api/v1/settings/brand', true],
