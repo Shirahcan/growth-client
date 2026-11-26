@@ -85,6 +85,21 @@ final class GrowthRoutes
         ['GET', 'settings/results', 'api/v1/settings/results', false],
         ['PUT', 'settings/results', 'api/v1/settings/results', true],
 
+        // Landing pages and keyword links (G7b3): the admin screens; every write names the person.
+        ['GET', 'landing-pages', 'api/v1/landing-pages', false],
+        ['POST', 'landing-pages', 'api/v1/landing-pages', true],
+        ['GET', 'landing-pages/{uuid}', 'api/v1/landing-pages/{uuid}', false],
+        ['PUT', 'landing-pages/{uuid}', 'api/v1/landing-pages/{uuid}', true],
+        ['DELETE', 'landing-pages/{uuid}', 'api/v1/landing-pages/{uuid}', true],
+        ['POST', 'landing-pages/{uuid}/publish', 'api/v1/landing-pages/{uuid}/publish', true],
+        ['POST', 'landing-pages/{uuid}/pause', 'api/v1/landing-pages/{uuid}/pause', true],
+        ['GET', 'keyword-links', 'api/v1/keyword-links', false],
+        ['POST', 'keyword-links', 'api/v1/keyword-links', true],
+        ['PUT', 'keyword-links/{uuid}', 'api/v1/keyword-links/{uuid}', true],
+        ['DELETE', 'keyword-links/{uuid}', 'api/v1/keyword-links/{uuid}', true],
+        ['GET', 'settings/landing', 'api/v1/settings/landing', false],
+        ['PUT', 'settings/landing', 'api/v1/settings/landing', true],
+
         // The brand kit (G2e): name, logo, colours, fonts, legal links; the sender is shown read-only.
         ['GET', 'settings/brand', 'api/v1/settings/brand', false],
         ['PUT', 'settings/brand', 'api/v1/settings/brand', true],

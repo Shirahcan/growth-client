@@ -89,6 +89,20 @@ class ProxyTest extends TestCase
         $this->assertSame('user:42', $sent['actor']['ref']);
     }
 
+    public function test_landing_rows_reach_the_service_and_a_publish_names_the_person(): void
+    {
+        $this->signIn();
+        $uuid = '0b7c2f8e-3d4a-4f5b-9c6d-7e8f9a0b1c2d';
+        $this->service([self::answer(200, ['success' => true, 'data' => ['pages' => []]]), self::answer(200, ['success' => true, 'data' => []])]);
+
+        $this->getJson('/admin/growth-service/landing-pages')->assertOk();
+        $this->assertSame('/api/v1/landing-pages', $this->history[0]['request']->getUri()->getPath());
+
+        $this->postJson("/admin/growth-service/landing-pages/{$uuid}/publish")->assertOk();
+        $this->assertSame("/api/v1/landing-pages/{$uuid}/publish", $this->history[1]['request']->getUri()->getPath());
+        $this->assertSame('user:42', json_decode((string) $this->history[1]['request']->getBody(), true)['actor']['ref']);
+    }
+
     public function test_a_slow_row_waits_its_own_timeout_and_every_other_row_keeps_the_clients(): void
     {
         $this->signIn();
