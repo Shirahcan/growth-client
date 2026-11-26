@@ -60,4 +60,16 @@ interface GrowthClient
 
     /** @return array{sources: list<array<string, mixed>>} the product's watched sources */
     public function watchedSources(): array;
+
+    /** Views the product counted (G6a1): visitor hashes it made, never an IP. @return array{received: int, added: int} */
+    public function recordViews(array $events): array;
+
+    /** The Results tab's numbers for a period (30d, month, quarter). @return array<string, mixed> */
+    public function results(string $period = '30d'): array;
+
+    /** @param list<string> $slugs  @return array<string, array{readers: int, subscribers: int}> */
+    public function resultsForPosts(array $slugs): array;
+
+    /** @param list<string> $aiHosts  @param array{ref: string, name?: string} $actor */
+    public function putResultsSettings(array $aiHosts, array $actor): array;
 }

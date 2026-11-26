@@ -155,6 +155,47 @@ class GrowthServiceClient implements GrowthClient
         return ['sources' => array_values((array) ($data['sources'] ?? []))];
     }
 
+    /**
+     * Views the product counted (G6a1): each a visitor HASH the product made, never an IP or a browser string.
+     * Insert-or-ignore on the service, so a resend never double counts.
+     *
+     * @param  list<array{page_kind: string, page_ref: string, visitor_hash: string, viewed_on: string, referrer_host?: ?string, utm_source?: ?string, source_class?: ?string}>  $events  at most 500
+     * @return array{received: int, added: int}
+     */
+    public function recordViews(array $events): array
+    {
+        $data = $this->send('POST', 'api/v1/views', ['events' => array_values($events)]);
+
+        return ['received' => (int) ($data['received'] ?? 0), 'added' => (int) ($data['added'] ?? 0)];
+    }
+
+    /** The Results tab's numbers for a period: 30d, month or quarter (G6a1). */
+    public function results(string $period = '30d'): array
+    {
+        return $this->send('GET', 'api/v1/results', ['period' => $period]);
+    }
+
+    /** @param list<string> $slugs  @return array<string, array{readers: int, subscribers: int}> */
+    public function resultsForPosts(array $slugs): array
+    {
+        if ($slugs === []) {
+            return [];
+        }
+
+        return (array) ($this->send('GET', 'api/v1/results/posts', ['slugs' => array_values($slugs)])['posts'] ?? []);
+    }
+
+    /**
+     * The AI assistant hosts a referrer is matched against (the product's own list, mirrored on save).
+     *
+     * @param  list<string>  $aiHosts
+     * @param  array{ref: string, name?: string}  $actor
+     */
+    public function putResultsSettings(array $aiHosts, array $actor): array
+    {
+        return $this->send('PUT', 'api/v1/settings/results', ['ai_hosts' => array_values($aiHosts), 'actor' => $actor]);
+    }
+
     public function asProduct(string $product): static
     {
         $clone = clone $this;

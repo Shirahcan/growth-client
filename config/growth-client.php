@@ -99,4 +99,11 @@ return [
 
     'announcement_reach' => null,
 
+    /*
+    | G6a2: when each address last became this product's customer: a class implementing
+    | Conversions\ConversionsAdapter. Null = the signed conversions route answers "not available".
+    */
+
+    'conversions' => null,
+
 ];

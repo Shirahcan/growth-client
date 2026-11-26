@@ -8,6 +8,7 @@ use Shirahcan\GrowthClient\Laravel\Http\GrowthProxyController;
 use Shirahcan\GrowthClient\Laravel\Http\GrowthPublicProxyController;
 use Shirahcan\GrowthClient\Laravel\Http\GrowthTrackController;
 use Shirahcan\GrowthClient\Laravel\Http\AnnouncementReachController;
+use Shirahcan\GrowthClient\Laravel\Http\ConversionsController;
 use Shirahcan\GrowthClient\Laravel\Http\FactsController;
 use Shirahcan\GrowthClient\Laravel\Http\PlanSourcesController;
 use Shirahcan\GrowthClient\Laravel\Http\ReviewersController;
@@ -327,6 +328,8 @@ final class GrowthRoutes
         Route::post(rtrim($uri, '/').'/segments/search', [SegmentsController::class, 'search'])->name('webhooks.growth-service.segments.search');
         // G5c3a: how many of the product's own users an announcement would reach (only the product can count them).
         Route::post(rtrim($uri, '/').'/announcements/reach', AnnouncementReachController::class)->name('webhooks.growth-service.announcements.reach');
+        // G6a2: when the service's subscribers last became the product's customers.
+        Route::post(rtrim($uri, '/').'/conversions', ConversionsController::class)->name('webhooks.growth-service.conversions');
 
         return Route::post($uri, WebhookController::class)->name('webhooks.growth-service');
     }

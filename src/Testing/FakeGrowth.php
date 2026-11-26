@@ -136,6 +136,14 @@ class FakeGrowth implements GrowthClient
      * @param  list<array<string, mixed>>  $signals
      * @param  list<array<string, mixed>>  $sources
      */
+    /** What `results()`, `resultsForPosts()` and `recordViews()` answer for a product (G6a2). */
+    public function seedResults(string $product, ?array $results = null, array $posts = [], ?int $viewsAdded = null): static
+    {
+        $this->data[$product] = array_filter(['results' => $results, 'results_posts' => $posts, 'views_added' => $viewsAdded], fn ($v) => $v !== null) + ($this->data[$product] ?? []);
+
+        return $this;
+    }
+
     public function seedPlan(string $product, array $ideas = [], array $signals = [], array $sources = []): static
     {
         $this->data[$product] = ['ideas' => $ideas, 'signals' => $signals, 'sources' => $sources];
@@ -172,6 +180,36 @@ class FakeGrowth implements GrowthClient
     }
 
     /** @return list<array<string, mixed>> only this fake's product's rows, as the service scopes them */
+    /** Records the batch; `data['views_added']` (default: all) says how many were new. */
+    public function recordViews(array $events): array
+    {
+        $this->record(__FUNCTION__, [$events]);
+
+        return ['received' => count($events), 'added' => (int) (($this->data[$this->product] ?? [])['views_added'] ?? count($events))];
+    }
+
+    public function results(string $period = '30d'): array
+    {
+        $this->record(__FUNCTION__, [$period]);
+
+        return (array) (($this->data[$this->product] ?? [])['results'] ?? ['period' => $period, 'new_subscribers' => [], 'reader_sources' => [], 'reader_to_booking' => [], 'conversions_known' => true]);
+    }
+
+    public function resultsForPosts(array $slugs): array
+    {
+        $this->record(__FUNCTION__, [$slugs]);
+        $known = (array) (($this->data[$this->product] ?? [])['results_posts'] ?? []);
+
+        return array_intersect_key($known, array_flip($slugs));
+    }
+
+    public function putResultsSettings(array $aiHosts, array $actor): array
+    {
+        $this->record(__FUNCTION__, [$aiHosts, $actor]);
+
+        return ['results' => ['ai_hosts' => array_values($aiHosts)]];
+    }
+
     private function dataFor(string $kind): array
     {
         return array_values(($this->data[$this->product] ?? [])[$kind] ?? []);
