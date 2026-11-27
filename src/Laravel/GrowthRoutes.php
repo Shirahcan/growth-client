@@ -335,6 +335,9 @@ final class GrowthRoutes
         ['GET', 'audience/preferences/{token}', 'api/v1/audience/preferences/{token}', false],
         ['PUT', 'audience/preferences/{token}', 'api/v1/audience/preferences/{token}', false],
         ['POST', 'audience/preferences/{token}/unsubscribe', 'api/v1/audience/preferences/{token}/unsubscribe', true],
+        // G7e3: a growth document's social card, as the product's share-card page draws it. Answered only for the
+        // 10-minute signed link the service's card job made; the signature travels in the query, which is forwarded.
+        ['GET', 'cards/{kind}/{uuid}', 'api/v1/public/cards/{kind}/{uuid}', false],
     ];
 
     /** Mount the public rows under the product's own public prefix; wrap it in a per-visitor throttle. */
