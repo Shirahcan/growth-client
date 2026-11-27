@@ -291,6 +291,9 @@ final class GrowthRoutes
         ['POST', 'campaigns/{uuid}/document/check', 'api/v1/campaigns/{uuid}/document/check', false],
         // The email exactly as a reader receives it now ({html, text, subject}), for the editor's "As sent" view. A read.
         ['GET', 'campaigns/{uuid}/document/sent', 'api/v1/campaigns/{uuid}/document/sent', false],
+        // Deliverability health (G5i): Settings' panel; saving names the person.
+        ['GET', 'deliverability', 'api/v1/deliverability', false],
+        ['PUT', 'settings/deliverability', 'api/v1/settings/deliverability', true],
         // Welcome series (G5g): built on the Newsletter tab; every write names the person.
         ['GET', 'welcome-series', 'api/v1/welcome-series', false],
         ['POST', 'welcome-series', 'api/v1/welcome-series', true],
