@@ -84,6 +84,10 @@ final class GrowthRoutes
         ['GET', 'results/posts', 'api/v1/results/posts', false],
         // G6c4: what led to paid work (first and last touch, counts only).
         ['GET', 'results/attribution', 'api/v1/results/attribution', false],
+        // G6d: AI answer visibility; the check and the questions carry the admin who asked.
+        ['GET', 'results/ai-visibility', 'api/v1/results/ai-visibility', false],
+        ['POST', 'results/ai-visibility/check', 'api/v1/results/ai-visibility/check', true],
+        ['PUT', 'settings/ai-visibility', 'api/v1/settings/ai-visibility', true],
         ['GET', 'settings/results', 'api/v1/settings/results', false],
         ['PUT', 'settings/results', 'api/v1/settings/results', true],
 
