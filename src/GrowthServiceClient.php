@@ -216,6 +216,22 @@ class GrowthServiceClient implements GrowthClient
         return $this->send('GET', 'api/v1/results', ['period' => $period]);
     }
 
+    /**
+     * The estate overview (G2f): every product's Growth counts side by side. Sent with the ESTATE key only, because a
+     * product key is refused; throws EstateKeyNotConfigured when this install holds no estate key.
+     *
+     * @return array{period: string, from: string, products: list<array<string, mixed>>, estate: array<string, int>, not_here: array<string, string>}
+     */
+    public function estateOverview(string $period = '30d'): array
+    {
+        $answer = $this->forward('GET', 'api/v1/estate/overview', ['period' => $period], estate: true);
+        if ($answer['status'] !== 200) {
+            throw new GrowthServiceException((string) ($answer['body']['message'] ?? 'The estate overview could not be read.'), 'http_'.$answer['status'], $answer['status']);
+        }
+
+        return (array) ($answer['body']['data'] ?? []);
+    }
+
     /** @param list<string> $slugs  @return array<string, array{readers: int, subscribers: int}> */
     public function resultsForPosts(array $slugs): array
     {
