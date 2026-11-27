@@ -82,6 +82,8 @@ final class GrowthRoutes
         // Results (G6a4): the numbers a Results tab shows, and the AI host list views are classified with.
         ['GET', 'results', 'api/v1/results', false],
         ['GET', 'results/posts', 'api/v1/results/posts', false],
+        // G6c4: what led to paid work (first and last touch, counts only).
+        ['GET', 'results/attribution', 'api/v1/results/attribution', false],
         ['GET', 'settings/results', 'api/v1/settings/results', false],
         ['PUT', 'settings/results', 'api/v1/settings/results', true],
 
