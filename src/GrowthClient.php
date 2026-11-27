@@ -39,6 +39,17 @@ interface GrowthClient
     public function uploadMedia(string $path, string $name, string $origin, array $actor, ?string $alt = null, ?string $sourceUrl = null): array;
 
     /**
+     * The PDF a landing page offers (G7b2): sent from the product's server, kept in documents-service's public file
+     * store, given an address on `$origin` (`{origin}/files/{id}.pdf`). Only a PDF is taken.
+     *
+     * @param  array{ref: string, name: string}  $actor
+     * @return array{page: array<string, mixed>}
+     *
+     * @throws Exceptions\GrowthRequestRejected with the sentence the person reads (not a PDF, too large, infected)
+     */
+    public function uploadLandingFile(string $pageUuid, string $path, string $name, string $origin, array $actor): array;
+
+    /**
      * A client that acts for another product with `?as_product=` (F1 rule 3). Only the estate key may;
      * a product key gets a {@see GrowthServiceException} with code `forbidden`. Returns a NEW client:
      * the original keeps acting for its own product.

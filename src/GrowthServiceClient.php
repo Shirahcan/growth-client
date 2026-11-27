@@ -125,6 +125,47 @@ class GrowthServiceClient implements GrowthClient
         throw self::errorFor($response, $json);
     }
 
+    public function uploadLandingFile(string $pageUuid, string $path, string $name, string $origin, array $actor): array
+    {
+        // A file is at most the platform's 5 MB, so its bytes travel as a string, as a picture's do.
+        $bytes = is_file($path) ? @file_get_contents($path) : false;
+        if ($bytes === false) {
+            throw new GrowthServiceUnavailable("The file at [{$path}] could not be read.", 'unreadable_file', 0);
+        }
+
+        $options = [
+            'headers' => ['Authorization' => 'Bearer '.$this->trustKey, 'Accept' => 'application/json'],
+            'http_errors' => false,
+            'multipart' => [
+                ['name' => 'file', 'contents' => $bytes, 'filename' => $name],
+                ['name' => 'origin', 'contents' => $origin],
+                ['name' => 'actor[ref]', 'contents' => (string) ($actor['ref'] ?? '')],
+                ['name' => 'actor[name]', 'contents' => (string) ($actor['name'] ?? '')],
+            ],
+            'timeout' => max($this->timeout, 60),
+        ];
+        if ($this->asProduct !== null) {
+            $options['query'] = ['as_product' => $this->asProduct];
+        }
+
+        try {
+            $response = $this->http->request('POST', 'api/v1/landing-pages/'.rawurlencode($pageUuid).'/file', $options);
+        } catch (ConnectException $e) {
+            throw new GrowthServiceUnavailable('growth-service is unreachable: '.$e->getMessage(), 'unreachable', 0);
+        } catch (GuzzleException $e) {
+            throw new GrowthServiceUnavailable('growth-service request failed: '.$e->getMessage(), 'transport', 0);
+        }
+
+        $json = json_decode((string) $response->getBody(), true);
+        $json = is_array($json) ? $json : [];
+        $status = $response->getStatusCode();
+        if ($status >= 200 && $status < 300) {
+            return (array) ($json['data'] ?? []);
+        }
+
+        throw self::errorFor($response, $json);
+    }
+
     public function whoami(): array
     {
         $json = $this->send('GET', 'api/v1/whoami');

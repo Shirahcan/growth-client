@@ -60,6 +60,21 @@ class FakeGrowth implements GrowthClient
     /** The next uploadMedia answers with this refusal (the store's or the library's sentence), once. */
     public ?string $refuseNextUpload = null;
 
+    public function uploadLandingFile(string $pageUuid, string $path, string $name, string $origin, array $actor): array
+    {
+        $this->record(__FUNCTION__, [$pageUuid, $path, $name, $origin, $actor]);
+
+        if ($this->refuseNextUpload !== null) {
+            $message = $this->refuseNextUpload;
+            $this->refuseNextUpload = null;
+            throw new GrowthRequestRejected($message, 'invalid', 422);
+        }
+
+        $id = sprintf('%08x-0000-4000-8000-%012x', 1, crc32($pageUuid.$name));
+
+        return ['page' => ['uuid' => $pageUuid, 'deliverable_kind' => 'file', 'has_file' => true, 'file_name' => $name, 'file_url' => rtrim($origin, '/').'/files/'.$id.'.pdf']];
+    }
+
     public function uploadMedia(string $path, string $name, string $origin, array $actor, ?string $alt = null, ?string $sourceUrl = null): array
     {
         $this->record(__FUNCTION__, [$path, $name, $origin, $actor, $alt, $sourceUrl]);
