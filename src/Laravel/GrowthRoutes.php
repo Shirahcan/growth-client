@@ -382,6 +382,7 @@ final class GrowthRoutes
         Route::post(rtrim($uri, '/').'/announcements/reach', AnnouncementReachController::class)->name('webhooks.growth-service.announcements.reach');
         // G6a2: when the service's subscribers last became the product's customers.
         Route::post(rtrim($uri, '/').'/conversions', ConversionsController::class)->name('webhooks.growth-service.conversions');
+        Route::post(rtrim($uri, '/').'/paid-work', \Shirahcan\GrowthClient\Laravel\Http\PaidWorkController::class)->name('webhooks.growth-service.paid-work');
 
         return Route::post($uri, WebhookController::class)->name('webhooks.growth-service');
     }
