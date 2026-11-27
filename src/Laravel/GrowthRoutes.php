@@ -96,6 +96,8 @@ final class GrowthRoutes
         ['POST', 'landing-pages', 'api/v1/landing-pages', true],
         // G7d: a landing page's words from the person's description (shared.growth.landing_copy).
         ['POST', 'landing-pages/draft-copy', 'api/v1/landing-pages/draft-copy', true],
+        // G7d2: the screen polls an on-demand writer's run (AI never inside a request).
+        ['GET', 'writer-runs/{uuid}', 'api/v1/writer-runs/{uuid}', false],
         ['GET', 'landing-pages/{uuid}', 'api/v1/landing-pages/{uuid}', false],
         ['PUT', 'landing-pages/{uuid}', 'api/v1/landing-pages/{uuid}', true],
         ['DELETE', 'landing-pages/{uuid}', 'api/v1/landing-pages/{uuid}', true],
