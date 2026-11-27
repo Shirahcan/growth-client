@@ -291,6 +291,11 @@ final class GrowthRoutes
         ['POST', 'campaigns/{uuid}/document/check', 'api/v1/campaigns/{uuid}/document/check', false],
         // The email exactly as a reader receives it now ({html, text, subject}), for the editor's "As sent" view. A read.
         ['GET', 'campaigns/{uuid}/document/sent', 'api/v1/campaigns/{uuid}/document/sent', false],
+        // Welcome series (G5g): built on the Newsletter tab; every write names the person.
+        ['GET', 'welcome-series', 'api/v1/welcome-series', false],
+        ['POST', 'welcome-series', 'api/v1/welcome-series', true],
+        ['PUT', 'welcome-series/{uuid}', 'api/v1/welcome-series/{uuid}', true],
+        ['DELETE', 'welcome-series/{uuid}', 'api/v1/welcome-series/{uuid}', true],
         ['GET', 'campaigns/{uuid}/document/fields', 'api/v1/campaigns/{uuid}/document/fields', false],
         ['PUT', 'campaigns/{uuid}/document/fields/{name}', 'api/v1/campaigns/{uuid}/document/fields/{name}', true],
         // Prepare an issue inside its template from the team's notes, the product's figures and news (growth-service N1g):
