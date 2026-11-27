@@ -94,6 +94,8 @@ final class GrowthRoutes
         // Landing pages and keyword links (G7b3): the admin screens; every write names the person.
         ['GET', 'landing-pages', 'api/v1/landing-pages', false],
         ['POST', 'landing-pages', 'api/v1/landing-pages', true],
+        // G7d: a landing page's words from the person's description (shared.growth.landing_copy).
+        ['POST', 'landing-pages/draft-copy', 'api/v1/landing-pages/draft-copy', true],
         ['GET', 'landing-pages/{uuid}', 'api/v1/landing-pages/{uuid}', false],
         ['PUT', 'landing-pages/{uuid}', 'api/v1/landing-pages/{uuid}', true],
         ['DELETE', 'landing-pages/{uuid}', 'api/v1/landing-pages/{uuid}', true],
