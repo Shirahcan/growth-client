@@ -98,6 +98,9 @@ final class GrowthRoutes
         ['POST', 'landing-pages/draft-copy', 'api/v1/landing-pages/draft-copy', true],
         // G7d2: the screen polls an on-demand writer's run (AI never inside a request).
         ['GET', 'writer-runs/{uuid}', 'api/v1/writer-runs/{uuid}', false],
+        // G7e4: a post's or landing page's share card as the admin sees it, and "Draw it again" (queues the job).
+        ['GET', 'cards/{kind}/{uuid}', 'api/v1/cards/{kind}/{uuid}', false],
+        ['POST', 'cards/{kind}/{uuid}/redraw', 'api/v1/cards/{kind}/{uuid}/redraw', true],
         ['GET', 'landing-pages/{uuid}', 'api/v1/landing-pages/{uuid}', false],
         ['PUT', 'landing-pages/{uuid}', 'api/v1/landing-pages/{uuid}', true],
         ['DELETE', 'landing-pages/{uuid}', 'api/v1/landing-pages/{uuid}', true],
