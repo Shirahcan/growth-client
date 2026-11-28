@@ -61,6 +61,8 @@ final class GrowthRoutes
         ['POST', 'plan/ideas/{uuid}/undo', 'api/v1/plan/ideas/{uuid}/undo', true],
         ['POST', 'plan/ideas/{uuid}/schedule', 'api/v1/plan/ideas/{uuid}/schedule', true],
         ['GET', 'plan/calendar', 'api/v1/plan/calendar', false],
+        // G7f: the published posts that need a refresh, ranked with their reasons (no AI).
+        ['GET', 'plan/refresh-queue', 'api/v1/plan/refresh-queue', false],
         ['GET', 'plan/radar', 'api/v1/plan/radar', false],
         ['GET', 'plan/radar/{id}', 'api/v1/plan/radar/{id}', false],
         ['POST', 'plan/radar/{id}/dismiss', 'api/v1/plan/radar/{id}/dismiss', true],
